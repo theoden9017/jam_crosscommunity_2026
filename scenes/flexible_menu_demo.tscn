@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://uk45vgf1buvt"]
+
+[ext_resource type="PackedScene" uid="uid://ba65ij65rwoxm" path="res://addons/flexible_menu/flexible_main_menu.tscn" id="1_menu"]
+
+[node name="FlexibleMenuDemo" type="Control" unique_id=1657317954]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FlexibleMainMenu" parent="." unique_id=171550982 instance=ExtResource("1_menu")]
+layout_mode = 1
+game_title = "Flexible Menu"
+credits_text = "Struttura modulare per i tuoi giochi Godot.
+Configura le funzioni nell'Inspector."
+remappable_actions = PackedStringArray()
+supported_locales = PackedStringArray("it", "en", "es")

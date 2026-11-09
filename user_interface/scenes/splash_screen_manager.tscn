@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://f4cikk7c2v6o"]
+
+[ext_resource type="Texture2D" uid="uid://drgfyvthhorfj" path="res://assets/images/original-outline-vertical-light.svg" id="1_s0gmw"]
+[ext_resource type="Script" uid="uid://cr3bngy2cs07j" path="res://user_interface/components/splash_screen_manager.gd" id="1_w4bk7"]
+[ext_resource type="PackedScene" path="res://scenes/flexible_menu_demo.tscn" id="2_l5odv"]
+[ext_resource type="Texture2D" uid="uid://1nacbh00qa8u" path="res://assets/images/original-outline-horizontal-light.svg" id="4_a0cge"]
+
+[node name="SplashScreenManager" type="Control" unique_id=1126181743 node_paths=PackedStringArray("splash_screen_container")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_w4bk7")
+load_scene = ExtResource("2_l5odv")
+splash_screen_container = NodePath("SplashScreenContainer")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1114382665]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="SplashScreenContainer" type="CenterContainer" parent="." unique_id=172637392]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Screen1" type="TextureRect" parent="SplashScreenContainer" unique_id=2056702480]
+layout_mode = 2
+texture = ExtResource("1_s0gmw")
+
+[node name="Screen2" type="TextureRect" parent="SplashScreenContainer" unique_id=1823026370]
+layout_mode = 2
+texture = ExtResource("4_a0cge")

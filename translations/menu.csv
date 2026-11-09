@@ -1,0 +1,29 @@
+keys,it,en,es
+FM_NEW_GAME,Nuova partita,New Game,Nueva partida
+FM_CONTINUE,Continua,Continue,Continuar
+FM_LOAD_GAME,Carica partita,Load Game,Cargar partida
+FM_SETTINGS,Impostazioni,Settings,Ajustes
+FM_CREDITS,Crediti,Credits,Créditos
+FM_CREDITS_TEXT,Struttura modulare per i tuoi giochi Godot. Configura le funzioni nell'Inspector., Modular structure for your Godot games. Configure functions in the Inspector.,Estructura modular para tus juegos en Godot. Configura funciones en el Inspector.
+FM_QUIT,Esci,Quit,Salir
+FM_GAME,Gioco,Game,Juego
+FM_GRAPHICS,Grafica,Graphics,Gráficos
+FM_AUDIO,Audio,Audio,Audio
+FM_LARGE_TEXT,Testo grande,Large text,Texto grande
+FM_REDUCE_MOTION,Riduci movimento,Reduce motion,Reducir movimiento
+FM_SUBTITLES,Sottotitoli,Subtitles,Subtítulos
+FM_FULLSCREEN,Schermo intero,Fullscreen,Pantalla completa
+FM_RESOLUTION,Risoluzione,Resolution,Resolución
+FM_HIGH_CONTRAST,Contrasto elevato,High contrast,Alto contraste
+FM_MASTER_VOLUME,Volume generale,Master volume,Volumen general
+FM_MUSIC,Musica,Music,Música
+FM_EFFECTS,Effetti,Effects,Efectos
+FM_LANGUAGE,Lingua,Language,Idioma
+FM_CONTROLS,Comandi,Controls,Controles
+FM_RESET_DEFAULTS,Ripristina predefiniti,Restore defaults,Restablecer valores predeterminados
+FM_BACK,Indietro,Back,Volver
+FM_NO_OPTIONS,Nessuna opzione attiva per questa categoria.,No options are enabled for this category.,No hay opciones activas para esta categoría.
+FM_UNASSIGNED,Non assegnato,Unassigned,Sin asignar
+FM_REBIND_PROMPT,"{action}: premi un tasto o un pulsante controller…","{action}: press a key or controller button…","{action}: pulsa una tecla o botón del mando…"
+FM_SAVED_GAMES,Partite salvate,Saved games,Partidas guardadas
+FM_NO_SAVED_GAMES,Nessuna partita salvata.,No saved games.,No hay partidas guardadas.
