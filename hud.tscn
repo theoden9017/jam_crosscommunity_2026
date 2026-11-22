@@ -1,0 +1,82 @@
+[gd_scene format=3 uid="uid://dgyvayripghul"]
+
+[ext_resource type="Script" uid="uid://joo333cd6t2l" path="res://hud.gd" id="1_37p78"]
+[ext_resource type="PackedScene" uid="uid://caodoq45s2gau" path="res://market_widget/MarketWidget.tscn" id="2_64ctp"]
+
+[node name="HUD" type="Control" unique_id=1199971175]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_37p78")
+
+[node name="TopPanel" type="Panel" parent="." unique_id=2052896296]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 40.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TopPanel" unique_id=464917028]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 40.0
+alignment = 1
+
+[node name="Label" type="Label" parent="TopPanel/HBoxContainer" unique_id=2051112130]
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+text = "        Giorni di sciopero :         "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="daysOfStrike" type="Label" parent="TopPanel/HBoxContainer" unique_id=1116272403]
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="TopPanel/HBoxContainer" unique_id=1063849369]
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+text = "        Lavoratori Coinvolti :         "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="worrkersInvolved" type="Label" parent="TopPanel/HBoxContainer" unique_id=1116133714]
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label3" type="Label" parent="TopPanel/HBoxContainer" unique_id=1232479667]
+custom_minimum_size = Vector2(836.06, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="IndexButton" type="Button" parent="TopPanel/HBoxContainer" unique_id=141510524]
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+text = "Index Finanziario"
+
+[node name="BottomPanel2" type="Panel" parent="." unique_id=807675855]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -49.0
+offset_right = 1920.0
+grow_vertical = 0
+
+[node name="MarketWidget" parent="." unique_id=693103681 instance=ExtResource("2_64ctp")]
+visible = false
+layout_mode = 1
+offset_left = 1579.0
+offset_top = 48.0
+offset_right = -9.0
+offset_bottom = -746.0
+
+[connection signal="pressed" from="TopPanel/HBoxContainer/IndexButton" to="." method="_on_index_button_pressed"]
+[connection signal="closed" from="MarketWidget" to="." method="_on_market_widget_closed"]

@@ -3,7 +3,9 @@
 [ext_resource type="Script" uid="uid://c2ewtlu4kqdc0" path="res://Levels/stage_01.gd" id="1_7bpeb"]
 [ext_resource type="Script" uid="uid://5qa3vuou3frv" path="res://Structure/flow_field.gd" id="2_l6r6a"]
 [ext_resource type="PackedScene" uid="uid://bc3qwpkmfy5ok" path="res://enemy.tscn" id="2_m80yq"]
+[ext_resource type="Script" uid="uid://b6tppg1fveuwk" path="res://Structure/input_controller.gd" id="4_3bxax"]
 [ext_resource type="Script" uid="uid://15mxbxv5bxcc" path="res://Structure/match_controller.gd" id="4_e1rv4"]
+[ext_resource type="PackedScene" uid="uid://dgyvayripghul" path="res://hud.tscn" id="6_vjt2r"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_7bpeb"]
 size = Vector3(2.4091797, 1, 19.073242)
@@ -72,12 +74,17 @@ size = Vector3(20, 7.455, 10.46)
 
 [node name="Stage01" type="Node3D" unique_id=239123184]
 script = ExtResource("1_7bpeb")
+spawn_interval = 5.0
 
 [node name="MatchController" type="Node" parent="." unique_id=137081113 node_paths=PackedStringArray("target", "flowfield")]
 script = ExtResource("4_e1rv4")
 enemy_scene = ExtResource("2_m80yq")
 target = NodePath("../Target")
 flowfield = NodePath("../FlowFieldBounds")
+
+[node name="InputController" type="Node" parent="." unique_id=1284558001 node_paths=PackedStringArray("camera")]
+script = ExtResource("4_3bxax")
+camera = NodePath("../Camera3D")
 
 [node name="Spawn01" type="Node3D" parent="." unique_id=493235416]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.104473, 0, -0.10092783)
@@ -121,7 +128,7 @@ preview_color = Color(0.9098039, 0.7254902, 0.18039216, 0.019607844)
 metadata/_custom_type_script = "uid://5qa3vuou3frv"
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=841037792]
-transform = Transform3D(1, 0, 0, 0, 0.41567948, 0.90951115, 0, -0.9095112, 0.41567948, -0.06813717, 12.291595, 6.411418)
+transform = Transform3D(0.97797644, 0.18982908, -0.08675875, 3.442114e-09, 0.4156795, 0.90951127, 0.2087155, -0.88948053, 0.40652475, 10.100735, 12.291595, 9.700755)
 fov = 88.8
 
 [node name="Target" type="Node3D" parent="." unique_id=727446176]
@@ -155,11 +162,11 @@ shape = SubResource("BoxShape3D_vjt2r")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.2561, 0, -1.4767723)
 shape = SubResource("BoxShape3D_uqxu0")
 
-[node name="CollisionShape3D5" type="CollisionShape3D" parent="Bounds" unique_id=2120319422 groups=["blocks"]]
+[node name="CancelloOvest" type="CollisionShape3D" parent="Bounds" unique_id=2120319422 groups=["blocks"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.720911, 0, -6.8137374)
 shape = SubResource("BoxShape3D_y1n5f")
 
-[node name="CollisionShape3D6" type="CollisionShape3D" parent="Bounds" unique_id=149290411 groups=["blocks"]]
+[node name="CancelloSud" type="CollisionShape3D" parent="Bounds" unique_id=149290411 groups=["blocks"]]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 15.170607, 0, 10.424341)
 shape = SubResource("BoxShape3D_fibqn")
 
@@ -214,5 +221,8 @@ material = SubResource("StandardMaterial3D_vjt2r")
 [node name="CSGMesh3D5" type="CSGMesh3D" parent="GreyBox" unique_id=1015417694]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 24.226803, 2.5317526, 1.6533794)
 mesh = SubResource("BoxMesh_uqxu0")
+
+[node name="HUD" parent="." unique_id=1199971175 instance=ExtResource("6_vjt2r")]
+mouse_filter = 2
 
 [connection signal="field_reviewed" from="FlowFieldBounds" to="." method="_on_flow_field_bounds_field_reviewed"]

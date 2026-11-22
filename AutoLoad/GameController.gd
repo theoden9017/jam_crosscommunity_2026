@@ -1,13 +1,15 @@
 extends Node
 
-const map1 := "res://prototype/world.tscn"
-const map2 := "res://prototype/world.tscn"
-const map3 := "res://prototype/world.tscn"
-const map4 := "res://prototype/world.tscn"
+const map1 := "res://Levels/stage01.tscn"
+const map2 := "res://Levels/stage01.tscn"
+const map3 := "res://Levels/stage01.tscn"
+const map4 := "res://Levels/stage01.tscn"
 const PATH_SETTINGS := "user://ccjam_settings.cfg"
 const PATH_GAME := "user://ccjam_game.cfg"
 
 var actual_level = 1
+var StrikeDays = 1
+var CurrentWorkers = 0
 
 var _settings: Dictionary
 var _awaiting_action := StringName()
@@ -17,7 +19,7 @@ var _defaults := {
 
 var _inGame: Dictionary
 var _defaults_inGame := {
-	"actual_level": 1
+	"actual_level": 1, "strike_days": 1
 }
 
 
