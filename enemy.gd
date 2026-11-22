@@ -1,6 +1,5 @@
 extends CharacterBody3D
 
-# Movimento dell'enemy guidato dal flow field condiviso della scena.
 
 # Velocità massima e regolarizzazione di accelerazione e sterzata.
 @export var move_speed: float = 3.0

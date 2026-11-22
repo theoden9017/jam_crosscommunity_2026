@@ -2,7 +2,7 @@ extends Control
 
 
 
-var livello := "res://prototype/world.tscn"
+var livello := "res://Levels/stage01.tscn"
 var settings := preload("res://Menu/settings.tscn")
 
 

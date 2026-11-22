@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://caodoq45s2gau"]
+
+[ext_resource type="Script" uid="uid://1fpw7jwu83t3" path="res://market_widget/market_widget.gd" id="1_qjaj6"]
+[ext_resource type="Script" uid="uid://cngvhk1787h0" path="res://market_widget/market_chart.gd" id="2_rcwc1"]
+[ext_resource type="Shader" uid="uid://debq1j7s71uie" path="res://market_widget/market_crt.gdshader" id="3_6tw7p"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6tw7p"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oaf1g"]
+shader = ExtResource("3_6tw7p")
+shader_parameter/scanline_strength = 0.0910000043225
+shader_parameter/glow_strength = 0.838000039805
+shader_parameter/scanline_frequency = 202.77600725686
+shader_parameter/animation_speed = 5.0
+
+[node name="MarketWidget" type="PanelContainer" unique_id=693103681]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1588.0
+offset_bottom = -794.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_6tw7p")
+script = ExtResource("1_qjaj6")
+
+[node name="Window" type="PanelContainer" parent="." unique_id=1338519933]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Window" unique_id=797095659]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Window/MarginContainer" unique_id=329380791]
+layout_mode = 2
+
+[node name="Header" type="HBoxContainer" parent="Window/MarginContainer/VBoxContainer" unique_id=1252911863]
+layout_mode = 2
+theme_override_constants/separation = 200
+
+[node name="Title" type="Label" parent="Window/MarginContainer/VBoxContainer/Header" unique_id=510844756]
+layout_mode = 2
+text = "TOSTAPAN"
+
+[node name="CloseButton" type="Button" parent="Window/MarginContainer/VBoxContainer/Header" unique_id=804037405]
+layout_mode = 2
+text = "X"
+
+[node name="MoneyLabel" type="Label" parent="Window/MarginContainer/VBoxContainer" unique_id=1061419845]
+layout_mode = 2
+
+[node name="MarketChart" type="Control" parent="Window/MarginContainer/VBoxContainer" unique_id=948268717]
+layout_mode = 2
+script = ExtResource("2_rcwc1")
+
+[node name="ColorRect" type="ColorRect" parent="Window" unique_id=878439202]
+material = SubResource("ShaderMaterial_oaf1g")
+layout_mode = 2
+mouse_filter = 2
+
+[connection signal="pressed" from="Window/MarginContainer/VBoxContainer/Header/CloseButton" to="." method="_on_close_button_pressed"]
