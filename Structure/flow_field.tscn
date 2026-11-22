@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://17jr72my540u"]
+
+[ext_resource type="Script" uid="uid://5qa3vuou3frv" path="res://Structure/flow_field.gd" id="1_mn00b"]
+
+[node name="FlowField" type="Node3D" unique_id=68602541]
+script = ExtResource("1_mn00b")
