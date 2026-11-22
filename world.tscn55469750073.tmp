@@ -1,0 +1,109 @@
+[gd_scene format=3 uid="uid://cp4hkgxsfxi8j"]
+
+[ext_resource type="PackedScene" uid="uid://bc3qwpkmfy5ok" path="res://enemy.tscn" id="1_f3sb7"]
+[ext_resource type="Script" uid="uid://c748lim2qna3h" path="res://world.gd" id="3_world_script"]
+[ext_resource type="Script" uid="uid://dxcsok5tsg3om" path="res://barracks_placement.gd" id="barracks_placement"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_gs0tk"]
+size = Vector2(20, 20)
+orientation = 1
+
+[sub_resource type="BoxShape3D" id="SpawnAreaShape"]
+size = Vector3(2.4091797, 1, 19.073242)
+
+[sub_resource type="BoxShape3D" id="TargetAreaShape"]
+size = Vector3(2, 6.2283936, 11.7248535)
+
+[sub_resource type="BoxShape3D" id="FlowFieldBoundsShape"]
+size = Vector3(65.205505, 1, 39.433594)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_gs0tk"]
+
+[node name="World" type="Node3D" unique_id=817548048]
+script = ExtResource("3_world_script")
+enemy_scene = ExtResource("1_f3sb7")
+
+[node name="BarracksPlacement" type="Node" parent="." unique_id=1044337846]
+script = ExtResource("barracks_placement")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1843663818]
+transform = Transform3D(3.674526, 0, 0, 0, 1, 0, 0, 0, 2.2359757, 9, 0, 0)
+mesh = SubResource("QuadMesh_gs0tk")
+
+[node name="Spawn" type="Node3D" parent="." unique_id=190001]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.14154, 0, 0)
+
+[node name="SpawnArea" type="Area3D" parent="Spawn" unique_id=29357863]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Spawn/SpawnArea" unique_id=888544812]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3061223, 0, 0)
+shape = SubResource("SpawnAreaShape")
+
+[node name="Target" type="Node3D" parent="." unique_id=926166037]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.860683, 0, -7.152279)
+
+[node name="TargetArea" type="Area3D" parent="Target" unique_id=642271502]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Target/TargetArea" unique_id=89603484]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1141968, 0)
+shape = SubResource("TargetAreaShape")
+
+[node name="FlowFieldBounds" type="Node3D" parent="." unique_id=2008422629]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33, 0, 25)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FlowFieldBounds" unique_id=938554895]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.272797, 0, -24.937714)
+shape = SubResource("FlowFieldBoundsShape")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=47196517]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1101922297]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.088783, 0, 0)
+shape = SubResource("WorldBoundaryShape3D_gs0tk")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=944333196]
+transform = Transform3D(1, 0, 0, 0, 0.41567945, 0.90951115, 0, -0.90951115, 0.41567945, 7.6238375, 12.291595, 10.292693)
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=570394560]
+
+[node name="FPSLabel" type="Label" parent="HUD" unique_id=554524604]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -150.0
+offset_top = 16.0
+offset_right = -20.0
+offset_bottom = 44.0
+grow_horizontal = 0
+text = "FPS: 0"
+horizontal_alignment = 2
+
+[node name="AddBarracksButton" type="Button" parent="HUD" unique_id=443042372]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 190.0
+offset_bottom = 64.0
+text = "Aggiungi barracks"
+
+[node name="DirectionalArrowButton" type="Button" parent="HUD" unique_id=2007426441]
+offset_left = 20.0
+offset_top = 68.0
+offset_right = 190.0
+offset_bottom = 112.0
+toggle_mode = true
+text = "Directional Arrow
+"
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1296761144]
+transform = Transform3D(-1.1313341e-08, 0.9659258, -0.25881907, 4.222196e-08, 0.25881907, 0.9659258, 1, 0, -4.371139e-08, 9, 7, 0)
+
+[connection signal="pressed" from="HUD/AddBarracksButton" to="." method="_on_add_barracks_button_pressed"]
+[connection signal="pressed" from="HUD/DirectionalArrowButton" to="." method="_on_directional_arrow_button_pressed"]
