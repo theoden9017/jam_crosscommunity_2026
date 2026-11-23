@@ -1,8 +1,12 @@
 extends Control
 
+
+signal tower_selected
+
 @onready var days_of_strike: Label = $TopPanel/HBoxContainer/daysOfStrike
 @onready var worrkers_involved: Label = $TopPanel/HBoxContainer/worrkersInvolved
 @onready var market_widget: PanelContainer = $MarketWidget
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -23,3 +27,7 @@ func _on_index_button_pressed() -> void:
 
 func _on_market_widget_closed() -> void:
 	market_widget.visible= false
+
+
+func _on_tower_pressed() -> void:
+	tower_selected.emit() 

@@ -13,6 +13,7 @@ extends Node3D
 
 var _spawn_timer := 0.0
 var _flow_debug_root: Node3D
+var _blocks_count := 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -54,6 +55,19 @@ func _collect_blocks(parent: Node, blocks: Array[Node3D]) -> void:
 			blocks.append(node as Node3D)
 		_collect_blocks(node, blocks)
 
-
 func _on_flow_field_bounds_field_reviewed() -> void:
 	pass # Replace with function body.
+
+func _on_hud_tower_selected() -> void:
+	var positions := [Vector3(5.0, 0.0, 6.0), Vector3(5.0, 0.0, 2.5), Vector3(5.0, 0.0, -1.0)]
+	var position: Vector3 = positions[_blocks_count % positions.size()]
+	_blocks_count += 1
+	add_blocks(position)
+
+func add_blocks(world_position: Vector3) -> Node3D:
+	var blocks := preload("res://tower.tscn").instantiate()
+	add_child(blocks)
+	blocks.add_to_group("blocks")
+	blocks.global_position = world_position
+	flow_field_bounds._rebuild_flow_field.call_deferred()
+	return blocks

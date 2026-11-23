@@ -226,3 +226,4 @@ mesh = SubResource("BoxMesh_uqxu0")
 mouse_filter = 2
 
 [connection signal="field_reviewed" from="FlowFieldBounds" to="." method="_on_flow_field_bounds_field_reviewed"]
+[connection signal="tower_selected" from="HUD" to="." method="_on_hud_tower_selected"]
