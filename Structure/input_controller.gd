@@ -6,6 +6,8 @@ extends Node
 @export var pan_limit_top: Vector2 = Vector2(10, 9)
 var _is_panning: bool = false
 
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		_is_panning = event.pressed
@@ -14,7 +16,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and _is_panning:
 		_pan_camera(event.relative)
 		get_viewport().set_input_as_handled()
-
 
 # Sposta la camera sul piano X/Z seguendo il trascinamento del mouse.
 func _pan_camera(mouse_delta: Vector2) -> void:

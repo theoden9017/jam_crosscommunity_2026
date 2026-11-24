@@ -53,6 +53,13 @@ const NEIGHBORS: Array[Vector2i] = [
 	Vector2i(1, 1), Vector2i(1, -1), Vector2i(-1, 1), Vector2i(-1, -1)
 ]
 
+var _ghost: Node3D
+var _yaw := 0.0
+var _ghost_material: StandardMaterial3D
+var _placement_is_valid := false
+
+var color_ghost_blue := Color(0.2, 0.9, 0.35, 0.42)
+var color_ghost_red := Color(1.0, 0.15, 0.12, 0.48)
 
 # ----------------------------------------
 # PREVIEW
@@ -489,3 +496,86 @@ func _make_flow_arrow() -> Node3D:
 	arrow.add_child(shaft)
 	arrow.add_child(head)
 	return arrow
+
+
+
+# Ricostruisce ostacoli, distanze, vettori e visualizzazione dopo una modifica.
+func can_place_blocks(world_position: Vector3, yaw: float, target: Node3D, spawn_area_shape: CollisionShape3D) -> bool:
+	# Simula l'ingombro della nuova barracks senza modificare la griglia corrente.
+	var test_blocked: Array[bool] = _blocked.duplicate()
+	var center := Vector2(world_position.x, world_position.z)
+	var axis_x := Vector2(cos(yaw), -sin(yaw))
+	var axis_z := Vector2(sin(yaw), cos(yaw))
+	for z in range(grid_height):
+		for x in range(grid_width):
+			var cell := Vector2i(x, z)
+			var offset := cell_to_world(cell) - center
+			if absf(offset.dot(axis_x)) <= 0.5 + blocks_clearance + cell_size * 0.5 and absf(offset.dot(axis_z)) <= 1.82 + blocks_clearance + cell_size * 0.5:
+				test_blocked[_index(cell)] = true
+
+	# Trova una cella libera per il target, come fa il calcolo del flow field.
+	var goal := _clamp_cell(world_to_cell(target.global_position))
+	if test_blocked[_index(goal)]:
+		var goal_found := false
+		for radius in range(1, maxi(grid_width, grid_height)):
+			for z in range(goal.y - radius, goal.y + radius + 1):
+				for x in range(goal.x - radius, goal.x + radius + 1):
+					var candidate := Vector2i(x, z)
+					if _inside_grid(candidate) and not test_blocked[_index(candidate)]:
+						goal = candidate
+						goal_found = true
+						break
+				if goal_found:
+					break
+			if goal_found:
+				break
+		if not goal_found:
+			return false
+
+	# Esegue una BFS dal target per marcare tutte le celle ancora raggiungibili.
+	var reachable := PackedByteArray()
+	reachable.resize(grid_width * grid_height)
+	var queue: Array[Vector2i] = [goal]
+	reachable[_index(goal)] = 1
+	var queue_cursor := 0
+	while queue_cursor < queue.size():
+		var current := queue[queue_cursor]
+		queue_cursor += 1
+		for neighbor_offset in NEIGHBORS:
+			var next := current + neighbor_offset
+			if not _inside_grid(next) or test_blocked[_index(next)] or reachable[_index(next)] == 1:
+				continue
+			if neighbor_offset.x != 0 and neighbor_offset.y != 0:
+				if test_blocked[_index(current + Vector2i(neighbor_offset.x, 0))] or test_blocked[_index(current + Vector2i(0, neighbor_offset.y))]:
+					continue
+			reachable[_index(next)] = 1
+			queue.append(next)
+
+	# Rifiuta il piazzamento se anche una cella di spawn rimane bloccata o isolata.
+	var spawn_box := spawn_area_shape.shape as BoxShape3D
+	if spawn_box == null:
+		return false
+	var inverse_spawn_transform := spawn_area_shape.global_transform.affine_inverse()
+	var spawn_half_size := spawn_box.size * 0.5
+	var found_spawn_cell := false
+	for z in range(grid_height):
+		for x in range(grid_width):
+			var cell := Vector2i(x, z)
+			var cell_world := Vector3(cell_to_world(cell).x, 0.0, cell_to_world(cell).y)
+			var spawn_local := inverse_spawn_transform * cell_world
+			if absf(spawn_local.x) > spawn_half_size.x or absf(spawn_local.y) > spawn_half_size.y or absf(spawn_local.z) > spawn_half_size.z:
+				continue
+			found_spawn_cell = true
+			var spawn_index := _index(cell)
+			if test_blocked[spawn_index] or reachable[spawn_index] == 0:
+				return false
+	return found_spawn_cell
+	
+# Controlla la connettività e colora il fantasma verde o rosso.
+func _refresh_placement_validity(target: Node3D, spawn_area_shape: CollisionShape3D) -> void:
+	_placement_is_valid = can_place_blocks(_ghost.global_position, _yaw, target, spawn_area_shape)
+	if _ghost_material:
+		if _placement_is_valid:
+			_ghost_material.albedo_color = color_ghost_blue
+		else:
+			_ghost_material.albedo_color = color_ghost_red
