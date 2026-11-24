@@ -5,15 +5,19 @@ extends Node3D
 @onready var match_controller: Node = $MatchController
 @onready var match_controller_target: Node3D = $Target
 @onready var grey_box: Node3D = $GreyBox
+@onready var camera_3d: Camera3D = $Camera3D
 
 @onready var flow_field_bounds: FlowField3D = $FlowFieldBounds
 @onready var target: Node3D = $Target
+@onready var spawn_area_shape01: CollisionShape3D = $Spawn01/SpawnArea/CollisionShape3D
+@onready var spawn_area_shape02: CollisionShape3D = $Spawn02/SpawnArea/CollisionShape3D
 @onready var spawn_01: Node3D = $Spawn01
 @onready var spawn_02: Node3D = $Spawn02
 
 var _spawn_timer := 0.0
 var _flow_debug_root: Node3D
 var _blocks_count := 0
+@onready var block_placing: Node = $BlockPlacing
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -59,15 +63,14 @@ func _on_flow_field_bounds_field_reviewed() -> void:
 	pass # Replace with function body.
 
 func _on_hud_tower_selected() -> void:
-	var positions := [Vector3(5.0, 0.0, 6.0), Vector3(5.0, 0.0, 2.5), Vector3(5.0, 0.0, -1.0)]
-	var position: Vector3 = positions[_blocks_count % positions.size()]
-	_blocks_count += 1
-	add_blocks(position)
+	block_placing.begin_placement()
 
-func add_blocks(world_position: Vector3) -> Node3D:
+
+func add_block(world_position: Vector3) -> Node3D:
 	var blocks := preload("res://tower.tscn").instantiate()
 	add_child(blocks)
 	blocks.add_to_group("blocks")
 	blocks.global_position = world_position
-	flow_field_bounds._rebuild_flow_field.call_deferred()
+	flow_field_bounds.rebuild_flow_field.call_deferred()
 	return blocks
+	

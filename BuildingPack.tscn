@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cy8w0626t8ipk"]
+[gd_scene format=3 uid="uid://cy8w0626t8ipk"]
 
 [ext_resource type="PackedScene" uid="uid://c7i5mclg6tbu5" path="res://Assets/Mesh/Capannoni.blend" id="1_pu7gi"]
 [ext_resource type="PackedScene" uid="uid://bc7pqn6rnroep" path="res://Assets/Mesh/Fabbrica001.blend" id="2_2lwtv"]
