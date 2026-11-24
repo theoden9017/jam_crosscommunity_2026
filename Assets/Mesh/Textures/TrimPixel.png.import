@@ -3,29 +3,28 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://l1g0k8ebv4p4"
-path.s3tc="res://.godot/imported/TrimPixel.png-bee4d8121cb121de1c98b9e1add0f0f1.s3tc.ctex"
+path="res://.godot/imported/TrimPixel.png-04a76f91500d08d318a9c405a4006782.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Mesh/textures/TrimPixel.png"
-dest_files=["res://.godot/imported/TrimPixel.png-bee4d8121cb121de1c98b9e1add0f0f1.s3tc.ctex"]
+source_file="res://Assets/Mesh/Textures/TrimPixel.png"
+dest_files=["res://.godot/imported/TrimPixel.png-04a76f91500d08d318a9c405a4006782.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=1
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
-compress/normal_map=0
+compress/normal_map=1
 compress/channel_pack=0
 mipmaps/generate=true
 mipmaps/limit=-1
-roughness/mode=0
-roughness/src_normal=""
+roughness/mode=1
+roughness/src_normal="res://Assets/Mesh/textures/TrimPixel.png"
 process/fix_alpha_border=true
 process/premult_alpha=false
 process/normal_map_invert_y=false

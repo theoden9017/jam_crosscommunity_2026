@@ -1,8 +1,8 @@
-[gd_scene format=3 uid="uid://c7j1r384eqeac"]
+[gd_scene load_steps=2 format=3 uid="uid://c7j1r384eqeac"]
 
 [ext_resource type="Script" uid="uid://dad4on8v64a37" path="res://Menu/main_menu.gd" id="1_q1two"]
 
-[node name="Main" type="Control" unique_id=1338526778]
+[node name="Main" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,7 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_q1two")
 
-[node name="Title" type="Label" parent="." unique_id=1212352708]
+[node name="Title" type="Label" parent="."]
 layout_mode = 0
 offset_left = 309.0
 offset_top = 127.0
@@ -21,7 +21,7 @@ theme_override_font_sizes/font_size = 120
 text = "This is the title
 "
 
-[node name="NewGame_btm" type="Button" parent="." unique_id=1992133781]
+[node name="NewGame_btm" type="Button" parent="."]
 layout_mode = 0
 offset_left = 672.0
 offset_top = 389.0
@@ -30,7 +30,7 @@ offset_bottom = 467.0
 theme_override_font_sizes/font_size = 40
 text = "New Game"
 
-[node name="Settings_btm" type="Button" parent="." unique_id=2030080610]
+[node name="Settings_btm" type="Button" parent="."]
 layout_mode = 0
 offset_left = 805.0
 offset_top = 516.0
@@ -40,7 +40,7 @@ theme_override_font_sizes/font_size = 40
 text = "Settings
 "
 
-[node name="End_btm" type="Button" parent="." unique_id=468128224]
+[node name="End_btm" type="Button" parent="."]
 layout_mode = 0
 offset_left = 665.0
 offset_top = 651.0
