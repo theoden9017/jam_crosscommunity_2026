@@ -83,6 +83,15 @@ material = SubResource("StandardMaterial3D_npkn0")
 size = Vector2(10, 10)
 orientation = 1
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_14540"]
+albedo_texture = ExtResource("15_14540")
+uv1_scale = Vector3(1, 0.2, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_1g15f"]
+material = SubResource("StandardMaterial3D_14540")
+size = Vector2(10, 10)
+orientation = 1
+
 [node name="Stage01" type="Node3D" unique_id=2029331640]
 script = ExtResource("1_7bpeb")
 spawn_interval = 5.0
@@ -137,8 +146,9 @@ shadow_enabled = true
 transform = Transform3D(64.697, 0, 0, 0, 1, 0, 0, 0, 35.0741, -8.844, 0, 1.71)
 script = ExtResource("2_l6r6a")
 shape = SubResource("BoxShape3D_qwfpk")
+cell_size = 0.7
 flow_arrow_height = 0.5
-blocks_clearance = 0.5
+blocks_clearance = 0.9
 preview_color = Color(0.909804, 0.72549, 0.180392, 0.0196078)
 metadata/_custom_type_script = "uid://5qa3vuou3frv"
 
@@ -303,6 +313,21 @@ skeleton = NodePath("../..")
 [node name="MeshInstance3D15" type="MeshInstance3D" parent="Ground" unique_id=22967952]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 0, 20)
 mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D16" type="MeshInstance3D" parent="Ground" unique_id=1221284931]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, 0)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D17" type="MeshInstance3D" parent="Ground" unique_id=1993115253]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, 10)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D18" type="MeshInstance3D" parent="Ground" unique_id=1224038809]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, 20)
+mesh = SubResource("QuadMesh_1g15f")
 skeleton = NodePath("../..")
 
 [node name="MeshInstance3D11" type="MeshInstance3D" parent="Ground" unique_id=1542498766]

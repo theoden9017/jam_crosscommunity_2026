@@ -349,6 +349,11 @@ func _calculate_flow_vectors() -> void:
 				var neighbor := cell + offset
 				if not _inside_grid(neighbor) or _blocked[_index(neighbor)]:
 					continue
+				# Mantiene la stessa regola del calcolo distanze: niente diagonali
+				# che tagliano l'angolo tra due celle bloccate.
+				if offset.x != 0 and offset.y != 0:
+					if _blocked[_index(cell + Vector2i(offset.x, 0))] or _blocked[_index(cell + Vector2i(0, offset.y))]:
+						continue
 				var neighbor_distance: float = _distances[_index(neighbor)]
 				if neighbor_distance < best_distance:
 					best_distance = neighbor_distance
