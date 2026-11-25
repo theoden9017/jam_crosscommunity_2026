@@ -2,6 +2,7 @@ extends Control
 
 
 signal tower_selected
+signal block_selected
 
 @onready var days_of_strike: Label = $TopPanel/HBoxContainer/daysOfStrike
 @onready var worrkers_involved: Label = $TopPanel/HBoxContainer/worrkersInvolved
@@ -31,3 +32,7 @@ func _on_market_widget_closed() -> void:
 
 func _on_tower_pressed() -> void:
 	tower_selected.emit() 
+
+
+func _on_block_pressed() -> void:
+	block_selected.emit()

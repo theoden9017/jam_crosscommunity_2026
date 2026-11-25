@@ -1,5 +1,6 @@
 extends Node
 
+signal block_added
 # Gestisce anteprima e conferma del piazzamento delle barracks.
 
 @onready var world: Node3D = get_parent()
@@ -7,16 +8,36 @@ extends Node
 @onready var flow_field_bounds: FlowField3D = $"../FlowFieldBounds"
 
 var _ghost: Node3D
+var _obj: String
 var _yaw := 0.0
 var _ghost_material: StandardMaterial3D
 var _placement_is_valid := false
 
+
+const OBJECTS = {
+	"TOWER": {
+		"scene": preload("res://tower.tscn"),
+		"ghostname": "TowerGhost",
+		"blocking": false
+	},
+	"BLOCK": {
+		"scene": preload("res://block.tscn"),
+		"ghostname": "BlockGhost",
+		"blocking": true
+	}
+}
+
+
+
+
+
 # Attiva la modalità costruzione e crea una copia trasparente della barracks.
-func begin_placement() -> void:
+func begin_placement(obj: String) -> void:
 	if is_instance_valid(_ghost):
 		_ghost.queue_free()
-	_ghost = preload("res://tower.tscn").instantiate()
-	_ghost.name = "TowerGhost"
+	_obj = obj
+	_ghost = OBJECTS[obj]["scene"].instantiate()
+	_ghost.name = OBJECTS[obj]["ghostname"]
 	world.add_child(_ghost)
 	_ghost.remove_from_group("blocks")
 	_yaw = 0.0
@@ -84,7 +105,7 @@ func _update_ghost_position() -> void:
 
 # Controlla la connettività e colora il fantasma verde o rosso.
 func _refresh_placement_validity() -> void:
-	_placement_is_valid = flow_field_bounds.can_place_blocks(_ghost.global_position, _yaw, world.target, world.spawn_area_shape01)
+	_placement_is_valid = flow_field_bounds.can_place_blocks(_ghost.global_position, _yaw, _ghost, world.target, world.spawn_area_shape01)
 	if _ghost_material:
 		if _placement_is_valid:
 			_ghost_material.albedo_color = Color(0.2, 0.9, 0.35, 0.42)
@@ -107,7 +128,7 @@ func _confirm_placement() -> void:
 	var placement_yaw := _yaw
 	_ghost.queue_free()
 	_ghost = null
-	var block: Node3D = world.add_block(placement_position)
+	var block: Node3D = add_block(placement_position)
 	block.rotation.y = placement_yaw
 
 
@@ -115,3 +136,14 @@ func _confirm_placement() -> void:
 func _cancel_placement() -> void:
 	_ghost.queue_free()
 	_ghost = null
+
+func add_block(world_position: Vector3) -> Node3D:
+	var blocks : Node3D= OBJECTS[_obj]["scene"].instantiate()
+	add_child(blocks)
+	if OBJECTS[_obj]["blocking"]:
+		blocks.add_to_group("blocks")
+	blocks.global_position = world_position
+	block_added.emit()
+	#flow_field_bounds.rebuild_flow_field.call_deferred()
+	return blocks
+	

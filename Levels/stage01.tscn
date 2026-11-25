@@ -14,11 +14,13 @@
 [ext_resource type="PackedScene" uid="uid://dj2qthjq5mqpf" path="res://Assets/Mesh/Orsolicchi.blend" id="11_dtnrq"]
 [ext_resource type="PackedScene" uid="uid://cac74e3gff1ci" path="res://Assets/Mesh/Rimorchio.blend" id="12_pe4bh"]
 [ext_resource type="PackedScene" uid="uid://c6mmujur8dbt3" path="res://Assets/Mesh/TostopanSRL.blend" id="13_h6v5h"]
+[ext_resource type="Texture2D" uid="uid://djgbxf6awj8q0" path="res://Assets/Mesh/Textures/TrimGroundPixel.png" id="15_14540"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_7bpeb"]
-size = Vector3(2.40918, 1, 19.0732)
+size = Vector3(2.40918, 1, 9.602078)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qwfpk"]
+margin = 0.5
 size = Vector3(1, 0.01, 1.2)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_e1rv4"]
@@ -72,6 +74,15 @@ size = Vector3(8.615, 1.445, 0.345)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vjt2r"]
 albedo_color = Color(0.792157, 0.694118, 0, 1)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_npkn0"]
+albedo_texture = ExtResource("15_14540")
+uv1_scale = Vector3(1, 0.2, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_oaf1g"]
+material = SubResource("StandardMaterial3D_npkn0")
+size = Vector2(10, 10)
+orientation = 1
+
 [node name="Stage01" type="Node3D" unique_id=2029331640]
 script = ExtResource("1_7bpeb")
 spawn_interval = 5.0
@@ -114,11 +125,11 @@ monitoring = false
 monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Spawn02/SpawnArea" unique_id=1474178231]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.306118, 0, 14.709097)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.06, 0.5, 16.492)
 shape = SubResource("BoxShape3D_7bpeb")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1608336628]
-transform = Transform3D(0.32583213, -0.15797439, 0.932136, -0.57737565, 0.7474775, 0.32850346, -0.748646, -0.6452296, 0.15234166, 32.5072, 11.2475, 0)
+transform = Transform3D(0.54820997, -0.47326982, 0.68955165, -0.3728204, 0.5997451, 0.70803285, -0.74864596, -0.6452295, 0.1523416, 32.5072, 11.2475, 0)
 light_color = Color(1, 0.811765, 0.756863, 1)
 shadow_enabled = true
 
@@ -126,9 +137,8 @@ shadow_enabled = true
 transform = Transform3D(64.697, 0, 0, 0, 1, 0, 0, 0, 35.0741, -8.844, 0, 1.71)
 script = ExtResource("2_l6r6a")
 shape = SubResource("BoxShape3D_qwfpk")
-show_flow_field = false
 flow_arrow_height = 0.5
-blocks_clearance = 0.2
+blocks_clearance = 0.5
 preview_color = Color(0.909804, 0.72549, 0.180392, 0.0196078)
 metadata/_custom_type_script = "uid://5qa3vuou3frv"
 
@@ -187,6 +197,7 @@ shape = SubResource("BoxShape3D_fibqn")
 
 [node name="CSGMesh3D" type="CSGMesh3D" parent="GreyBox" unique_id=1423623692]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.659, 0, 0)
+visible = false
 mesh = SubResource("BoxMesh_npkn0")
 material = SubResource("StandardMaterial3D_4wumx")
 
@@ -196,7 +207,7 @@ mesh = SubResource("BoxMesh_7bpeb")
 material = SubResource("StandardMaterial3D_pqjnt")
 
 [node name="CSGMesh3D6" type="CSGMesh3D" parent="GreyBox" unique_id=1046123055]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.4096, 0, 10.3778)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.85468, 0, 10.3778)
 mesh = SubResource("BoxMesh_e1rv4")
 material = SubResource("StandardMaterial3D_oaf1g")
 
@@ -216,6 +227,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.06, 0, 17.818)
 [node name="Capannoni" parent="Edifici" unique_id=1703306219 instance=ExtResource("8_g8obo")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -10.706537, 0, -19.788)
 
+[node name="Capannoni2" parent="Edifici" unique_id=2104140168 instance=ExtResource("8_g8obo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.2806, 0, 21.977697)
+
 [node name="Fabbrica001" parent="Edifici" unique_id=1610104303 instance=ExtResource("9_14540")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13.414, 0, -0.641)
 
@@ -234,5 +248,84 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.031421, 0.00091362, -19.79
 [node name="Magazzino2" parent="Edifici" unique_id=1794500117 instance=ExtResource("10_1g15f")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 25.301, 0, -5.681)
 
+[node name="Ground" type="Node3D" parent="." unique_id=1445271704]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.014887, 0, -5.739765)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground" unique_id=242002194]
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Ground" unique_id=928523195]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 0)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Ground" unique_id=1328255112]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, 0)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="Ground" unique_id=985820561]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 0)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="Ground" unique_id=1723962245]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 10)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="Ground" unique_id=1921943121]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, 10)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D9" type="MeshInstance3D" parent="Ground" unique_id=999961843]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 10)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D10" type="MeshInstance3D" parent="Ground" unique_id=375754144]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 20)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D13" type="MeshInstance3D" parent="Ground" unique_id=529202827]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 0, 0)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D14" type="MeshInstance3D" parent="Ground" unique_id=376398845]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 0, 10)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D15" type="MeshInstance3D" parent="Ground" unique_id=22967952]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 0, 20)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D11" type="MeshInstance3D" parent="Ground" unique_id=1542498766]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, 20)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D12" type="MeshInstance3D" parent="Ground" unique_id=1132475236]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 20)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Ground" unique_id=1872394670]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10.04561)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Ground" unique_id=1029966511]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20.04561)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[connection signal="block_added" from="BlockPlacing" to="." method="_on_block_placing_block_added"]
 [connection signal="field_reviewed" from="FlowFieldBounds" to="." method="_on_flow_field_bounds_field_reviewed"]
+[connection signal="block_selected" from="HUD" to="." method="_on_hud_block_selected"]
 [connection signal="tower_selected" from="HUD" to="." method="_on_hud_tower_selected"]
