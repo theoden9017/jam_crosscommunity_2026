@@ -11,11 +11,12 @@ top_radius = 0.3
 bottom_radius = 0.4
 height = 0.6230469
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_gs0tk"]
-height = 0.64208984
-radius = 0.2
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_7k104"]
+radius = 0.3145752
+height = 0.93190384
 
 [node name="Enemy" type="CharacterBody3D" unique_id=24202930]
+floor_stop_on_slope = false
 script = ExtResource("1_enemy_script")
 move_speed = 5.0
 crowd_variation = 0.5
@@ -23,9 +24,8 @@ crowd_variation_frequency = 1.15
 recovery_duration = 3.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1442227462]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32480264, 0)
 mesh = SubResource("CylinderMesh_gs0tk")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=931793990]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32104492, 0)
-shape = SubResource("CylinderShape3D_gs0tk")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.16077614, 0)
+shape = SubResource("CapsuleShape3D_7k104")
