@@ -1,5 +1,7 @@
 extends Node3D
 
+
+
 @export_range(1, 5, 1) var _level:int
 @export var spawn_interval: float = 1.0
 @onready var match_controller: Node = $MatchController
@@ -60,17 +62,19 @@ func _collect_blocks(parent: Node, blocks: Array[Node3D]) -> void:
 		_collect_blocks(node, blocks)
 
 func _on_flow_field_bounds_field_reviewed() -> void:
-	pass # Replace with function body.
+	pass
+
+
+
+
+
+
+func _on_hud_block_selected() -> void:
+	block_placing.begin_placement("BLOCK")
 
 func _on_hud_tower_selected() -> void:
-	block_placing.begin_placement()
+	block_placing.begin_placement("TOWER")
 
 
-func add_block(world_position: Vector3) -> Node3D:
-	var blocks := preload("res://tower.tscn").instantiate()
-	add_child(blocks)
-	blocks.add_to_group("blocks")
-	blocks.global_position = world_position
-	flow_field_bounds.rebuild_flow_field.call_deferred()
-	return blocks
-	
+func _on_block_placing_block_added() -> void:
+	flow_field_bounds.rebuild_flow_field(update_field(), target)

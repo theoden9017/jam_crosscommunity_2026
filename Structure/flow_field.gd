@@ -500,17 +500,22 @@ func _make_flow_arrow() -> Node3D:
 
 
 # Ricostruisce ostacoli, distanze, vettori e visualizzazione dopo una modifica.
-func can_place_blocks(world_position: Vector3, yaw: float, target: Node3D, spawn_area_shape: CollisionShape3D) -> bool:
+func can_place_blocks(world_position: Vector3, yaw: float, placement_node: Node3D, target: Node3D, spawn_area_shape: CollisionShape3D) -> bool:
 	# Simula l'ingombro della nuova barracks senza modificare la griglia corrente.
 	var test_blocked: Array[bool] = _blocked.duplicate()
+	var footprint := _get_placement_half_extents(placement_node)
+	if footprint.x <= 0.0 or footprint.y <= 0.0:
+		return false
 	var center := Vector2(world_position.x, world_position.z)
 	var axis_x := Vector2(cos(yaw), -sin(yaw))
 	var axis_z := Vector2(sin(yaw), cos(yaw))
+	var cell_projection_x := cell_size * 0.5 * (absf(axis_x.x) + absf(axis_x.y))
+	var cell_projection_z := cell_size * 0.5 * (absf(axis_z.x) + absf(axis_z.y))
 	for z in range(grid_height):
 		for x in range(grid_width):
 			var cell := Vector2i(x, z)
 			var offset := cell_to_world(cell) - center
-			if absf(offset.dot(axis_x)) <= 0.5 + blocks_clearance + cell_size * 0.5 and absf(offset.dot(axis_z)) <= 1.82 + blocks_clearance + cell_size * 0.5:
+			if absf(offset.dot(axis_x)) <= footprint.x + blocks_clearance + cell_projection_x and absf(offset.dot(axis_z)) <= footprint.y + blocks_clearance + cell_projection_z:
 				test_blocked[_index(cell)] = true
 
 	# Trova una cella libera per il target, come fa il calcolo del flow field.
@@ -570,10 +575,32 @@ func can_place_blocks(world_position: Vector3, yaw: float, target: Node3D, spawn
 			if test_blocked[spawn_index] or reachable[spawn_index] == 0:
 				return false
 	return found_spawn_cell
+
+
+# Ricava l'impronta X/Z dalle collisioni direttamente sotto il nodo da piazzare.
+# Ignora le Area3D figlie (per esempio il raggio d'attacco della torre).
+func _get_placement_half_extents(placement_node: Node3D) -> Vector2:
+	var footprint := AABB()
+	var found_shape := false
+	for child in placement_node.get_children():
+		if child is not CollisionShape3D:
+			continue
+		var collision := child as CollisionShape3D
+		if collision.shape == null:
+			continue
+		var local_shape_aabb := collision.shape.get_debug_mesh().get_aabb()
+		var shape_aabb := _transform_aabb(local_shape_aabb, collision.transform)
+		footprint = shape_aabb if not found_shape else footprint.merge(shape_aabb)
+		found_shape = true
+	if not found_shape:
+		return Vector2.ZERO
+	var half_x := maxf(absf(footprint.position.x), absf(footprint.end.x))
+	var half_z := maxf(absf(footprint.position.z), absf(footprint.end.z))
+	return Vector2(half_x, half_z)
 	
 # Controlla la connettività e colora il fantasma verde o rosso.
 func _refresh_placement_validity(target: Node3D, spawn_area_shape: CollisionShape3D) -> void:
-	_placement_is_valid = can_place_blocks(_ghost.global_position, _yaw, target, spawn_area_shape)
+	_placement_is_valid = can_place_blocks(_ghost.global_position, _yaw, _ghost, target, spawn_area_shape)
 	if _ghost_material:
 		if _placement_is_valid:
 			_ghost_material.albedo_color = color_ghost_blue
