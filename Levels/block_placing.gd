@@ -103,7 +103,7 @@ func _rotate_ghost(angle: float) -> void:
 func _confirm_placement() -> void:
 	if not _placement_is_valid:
 		return
-	var placement_position := _ghost.global_position
+	var placement_position := _ghost.global_position + Vector3(0,0.5,0)
 	var placement_yaw := _yaw
 	_ghost.queue_free()
 	_ghost = null

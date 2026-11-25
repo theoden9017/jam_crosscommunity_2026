@@ -58,7 +58,7 @@ func spawn_enemy_wave(spawn_area_shape: Node3D) -> void:
 		var area_extents := _get_spawn_area_extents(spawn_area_shape)
 		var local_offset := Vector3(
 			randf_range(-area_extents.x, area_extents.x),
-			randf_range(-area_extents.y, area_extents.y),
+			0, #randf_range(-area_extents.y, area_extents.y),
 			randf_range(-area_extents.z, area_extents.z)
 		)
 		enemy.global_position = spawn_area_shape.global_transform * local_offset
