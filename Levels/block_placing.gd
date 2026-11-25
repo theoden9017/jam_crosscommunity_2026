@@ -128,8 +128,7 @@ func _confirm_placement() -> void:
 	var placement_yaw := _yaw
 	_ghost.queue_free()
 	_ghost = null
-	var block: Node3D = add_block(placement_position)
-	block.rotation.y = placement_yaw
+	add_block(placement_position, placement_yaw)
 
 
 # Annulla la modalità costruzione con il tasto destro.
@@ -137,12 +136,13 @@ func _cancel_placement() -> void:
 	_ghost.queue_free()
 	_ghost = null
 
-func add_block(world_position: Vector3) -> Node3D:
+func add_block(world_position: Vector3, yaw: float) -> Node3D:
 	var blocks : Node3D= OBJECTS[_obj]["scene"].instantiate()
 	add_child(blocks)
 	if OBJECTS[_obj]["blocking"]:
 		blocks.add_to_group("blocks")
 	blocks.global_position = world_position
+	blocks.rotation.y = yaw
 	block_added.emit()
 	#flow_field_bounds.rebuild_flow_field.call_deferred()
 	return blocks
