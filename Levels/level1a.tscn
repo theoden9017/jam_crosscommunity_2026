@@ -1,0 +1,182 @@
+[gd_scene format=3 uid="uid://dwe0hulyv4pwn"]
+
+[ext_resource type="Script" uid="uid://b6tppg1fveuwk" path="res://Structure/input_controller.gd" id="1_jjjjw"]
+[ext_resource type="Texture2D" uid="uid://djgbxf6awj8q0" path="res://Assets/Mesh/Textures/TrimGroundPixel.png" id="2_mu7li"]
+[ext_resource type="PackedScene" uid="uid://btsqcbfyy8kdx" path="res://Assets/Mesh/Fabbrica.blend" id="3_soyv5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_npkn0"]
+albedo_texture = ExtResource("2_mu7li")
+uv1_scale = Vector3(1, 0.2, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_b0ixl"]
+material = SubResource("StandardMaterial3D_npkn0")
+size = Vector2(10, 10)
+orientation = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jjjjw"]
+albedo_texture = ExtResource("2_mu7li")
+uv1_scale = Vector3(1, 0.2, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_mu7li"]
+material = SubResource("StandardMaterial3D_jjjjw")
+size = Vector2(10, 10)
+orientation = 1
+
+[node name="Node3D" type="Node3D" unique_id=1064973547]
+
+[node name="InputController" type="Node" parent="." unique_id=1673638727 node_paths=PackedStringArray("camera")]
+script = ExtResource("1_jjjjw")
+camera = NodePath("../Camera3D")
+pan_limit_bottom = Vector2(-60, 15)
+pan_limit_top = Vector2(10, 15)
+
+[node name="Ground" type="Node3D" parent="." unique_id=1551168083]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, -5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground" unique_id=546646400]
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Ground" unique_id=655925059]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 0)
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Ground" unique_id=377292775]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, 0)
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="Ground" unique_id=1373938544]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 0)
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="Ground" unique_id=291408369]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 10)
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="Ground" unique_id=1353744480]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, 10)
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D9" type="MeshInstance3D" parent="Ground" unique_id=1647504777]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 10)
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D10" type="MeshInstance3D" parent="Ground" unique_id=2127927163]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 20)
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D13" type="MeshInstance3D" parent="Ground" unique_id=582460532]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 0, 0)
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D14" type="MeshInstance3D" parent="Ground" unique_id=967876402]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 0, 10)
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D15" type="MeshInstance3D" parent="Ground" unique_id=61875357]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 0, 20)
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D11" type="MeshInstance3D" parent="Ground" unique_id=1320713946]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, 20)
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D12" type="MeshInstance3D" parent="Ground" unique_id=750576835]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 20)
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Ground" unique_id=532267518]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10.04561)
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Ground" unique_id=1814191022]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20.04561)
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="Ground2" type="Node3D" parent="." unique_id=1194440037]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32, 0, -5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground2" unique_id=465012161]
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Ground2" unique_id=830161491]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 0)
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Ground2" unique_id=818090808]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, 0)
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="Ground2" unique_id=1780254588]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 0)
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="Ground2" unique_id=1370710683]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 10)
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="Ground2" unique_id=217421132]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, 10)
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D9" type="MeshInstance3D" parent="Ground2" unique_id=1951738095]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 10)
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D10" type="MeshInstance3D" parent="Ground2" unique_id=1361329840]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 20)
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D11" type="MeshInstance3D" parent="Ground2" unique_id=2124558007]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, 20)
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D12" type="MeshInstance3D" parent="Ground2" unique_id=739149733]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 20)
+mesh = SubResource("QuadMesh_mu7li")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Ground2" unique_id=458057679]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10.04561)
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Ground2" unique_id=1847056268]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20.04561)
+mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="Fabbrica" parent="." unique_id=1328202481 instance=ExtResource("3_soyv5")]
+transform = Transform3D(-0.021116674, 0, -0.9997771, 0, 1, 0, 0.9997771, 0, -0.021116674, 12.631, 0, 5.332)
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1737000343]
+transform = Transform3D(0.98480725, -0.15788728, 0.072286405, 0, 0.41628107, 0.909236, -0.17364809, -0.89542323, 0.40995654, 10.1007, 12.2916, 9.70076)
+fov = 88.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1218848809]
+transform = Transform3D(0.54820997, -0.47326994, 0.6895516, -0.3728204, 0.5997452, 0.70803297, -0.74864596, -0.64522964, 0.15234163, 0.35186386, 20.110485, -9.568146)
+light_color = Color(1, 0.811765, 0.756863, 1)
+shadow_enabled = true
