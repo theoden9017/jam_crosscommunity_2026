@@ -190,26 +190,71 @@ func _index(cell: Vector2i) -> int:
 	return cell.y * grid_width + cell.x
 
 func _mark_blocked_cells(blocks: Node3D) -> void:
-	var world_aabb := _get_node_world_aabb(blocks)
-	if world_aabb.size == Vector3.ZERO:
+	var footprints := _get_node_footprints(blocks)
+	if footprints.is_empty():
 		push_warning("Flow field: impossibile ricavare le dimensioni del blocco '%s'." % blocks.name)
 		return
-	# La griglia e cell_to_world usano coordinate mondiali: confronta direttamente
-	# l'AABB mondiale invece di trasformarlo nello spazio locale del FlowField.
-	var min_x := world_aabb.position.x - blocks_clearance
-	var max_x := world_aabb.end.x + blocks_clearance
-	var min_z := world_aabb.position.z - blocks_clearance
-	var max_z := world_aabb.end.z + blocks_clearance
 	for z in range(grid_height):
 		for x in range(grid_width):
 			var cell := Vector2i(x, z)
-			var cell_center := cell_to_world(cell)
-			if cell_center.x + cell_size * 0.5 >= min_x \
-			and cell_center.x - cell_size * 0.5 <= max_x \
-			and cell_center.y + cell_size * 0.5 >= min_z \
-			and cell_center.y - cell_size * 0.5 <= max_z:
+			if _cell_intersects_footprints(cell, footprints):
 				_blocked[_index(cell)] = true
 
+
+func _get_node_footprints(node: Node3D) -> Array[PackedVector2Array]:
+	var result: Array[PackedVector2Array] = []
+	var pending: Array[Node] = [node]
+	while not pending.is_empty():
+		var current: Node = pending.pop_back()
+		if current is CollisionShape3D:
+			var collision := current as CollisionShape3D
+			if collision.shape is BoxShape3D:
+				var box := collision.shape as BoxShape3D
+				var corners := PackedVector2Array()
+				for sx in [-1.0, 1.0]:
+					for sz in [-1.0, 1.0]:
+						var point := collision.global_transform * Vector3(box.size.x * sx * 0.5, 0.0, box.size.z * sz * 0.5)
+						corners.append(Vector2(point.x, point.z))
+				result.append(corners)
+		for child in current.get_children():
+			pending.append(child)
+	if not result.is_empty():
+		return result
+	# Le forme CSG sono scomposte nei triangoli della mesh generata.
+	if node is CSGShape3D:
+		var meshes := (node as CSGShape3D).get_meshes()
+		if meshes.size() > 1 and meshes[1] is ArrayMesh:
+			var mesh := meshes[1] as ArrayMesh
+			var arrays := mesh.surface_get_arrays(0)
+			var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+			var indices: PackedInt32Array = arrays[Mesh.ARRAY_INDEX]
+			for i in range(0, indices.size(), 3):
+				var triangle := PackedVector2Array()
+				for j in range(3):
+					var point: Vector3 = meshes[0] * vertices[indices[i + j]]
+					triangle.append(Vector2(point.x, point.z))
+				result.append(triangle)
+	return result
+
+
+func _cell_intersects_footprints(cell: Vector2i, footprints: Array[PackedVector2Array]) -> bool:
+	var center := cell_to_world(cell)
+	var half := cell_size * 0.5 + blocks_clearance
+	var square := [center + Vector2(-half, -half), center + Vector2(half, -half), center + Vector2(half, half), center + Vector2(-half, half)]
+	for polygon in footprints:
+		for point in polygon:
+			if absf(point.x - center.x) <= half and absf(point.y - center.y) <= half:
+				return true
+		for point in square:
+			if Geometry2D.is_point_in_polygon(point, polygon):
+				return true
+		for i in range(polygon.size()):
+			var a := polygon[i]
+			var b := polygon[(i + 1) % polygon.size()]
+			for j in range(4):
+				if Geometry2D.segment_intersects_segment(a, b, square[j], square[(j + 1) % 4]) != null:
+					return true
+	return false
 
 func _get_node_world_aabb(node: Node3D) -> AABB:
 	# Per i CSG usa il mesh effettivamente generato: l'AABB del nodo CSG può
@@ -259,35 +304,67 @@ func _transform_aabb(local_aabb: AABB, transform: Transform3D) -> AABB:
 	return result
 
 # Calcola la distanza minima di ogni cella libera dal target con Dijkstra.
+func _get_target_cells(target: Node3D) -> Array[Vector2i]:
+	var target_shapes: Array[CollisionShape3D] = []
+	var pending: Array[Node] = [target]
+	while not pending.is_empty():
+		var current: Node = pending.pop_back()
+		if current is CollisionShape3D:
+			var collision := current as CollisionShape3D
+			if collision.shape is BoxShape3D:
+				target_shapes.append(collision)
+		for child in current.get_children():
+			pending.append(child)
+	var goals: Array[Vector2i] = []
+	for z in range(grid_height):
+		for x in range(grid_width):
+			var cell := Vector2i(x, z)
+			var center := cell_to_world(cell)
+			var is_goal := false
+			for collision in target_shapes:
+				var box := collision.shape as BoxShape3D
+				var local := collision.global_transform.affine_inverse() * Vector3(center.x, collision.global_position.y, center.y)
+				if absf(local.x) <= box.size.x * 0.5 and absf(local.z) <= box.size.z * 0.5:
+					is_goal = true
+					break
+			if not is_goal and target_shapes.is_empty():
+				is_goal = cell == _clamp_cell(world_to_cell(target.global_position))
+			if is_goal and not _blocked[_index(cell)]:
+				goals.append(cell)
+	return goals
+
+
 func _calculate_distances_from_target(target: Node3D) -> void:
 	var count := grid_width * grid_height
 	_distances.resize(count)
 	_distances.fill(INF)
-	var target_cell := _clamp_cell(world_to_cell(target.global_position))
-	if _blocked[_index(target_cell)]:
-		# Se un blocks copre il target, sceglie la cella libera più vicina.
-		var found := false
-		for radius in range(1, maxi(grid_width, grid_height)):
-			for z in range(target_cell.y - radius, target_cell.y + radius + 1):
-				for x in range(target_cell.x - radius, target_cell.x + radius + 1):
-					var candidate := Vector2i(x, z)
-					if _inside_grid(candidate) and not _blocked[_index(candidate)]:
-						target_cell = candidate
-						found = true
-						break
-				if found:
-					break
-			if found:
-				break
-	if _blocked[_index(target_cell)]:
-		push_warning("Flow field: there are no free cells to reache the target.")
-		return
+	var goals := _get_target_cells(target)
+	if goals.is_empty():
+		# Se l'area target è coperta, prova prima la cella più vicina al centro.
+		var target_cell := _clamp_cell(world_to_cell(target.global_position))
+		var best_cell := Vector2i(-1, -1)
+		var best_distance := INF
+		for z in range(grid_height):
+			for x in range(grid_width):
+				var candidate := Vector2i(x, z)
+				if _blocked[_index(candidate)]:
+					continue
+				var distance := candidate.distance_squared_to(target_cell)
+				if distance < best_distance:
+					best_distance = distance
+					best_cell = candidate
+		if best_cell.x < 0:
+			push_warning("Flow field: there are no free cells to reach the target.")
+			return
+		goals.append(best_cell)
 
-	# Propaga le distanze dal target a tutte le celle libere raggiungibili.
 	var visited := PackedByteArray()
 	visited.resize(count)
-	var frontier: Array[int] = [_index(target_cell)]
-	_distances[_index(target_cell)] = 0.0
+	var frontier: Array[int] = []
+	for goal in goals:
+		var goal_index := _index(goal)
+		_distances[goal_index] = 0.0
+		frontier.append(goal_index)
 	while not frontier.is_empty():
 		var best_frontier_index := 0
 		for i in range(1, frontier.size()):
@@ -302,7 +379,6 @@ func _calculate_distances_from_target(target: Node3D) -> void:
 			var next := current + offset
 			if not _inside_grid(next) or _blocked[_index(next)]:
 				continue
-			# Evita di attraversare in diagonale l'angolo di due celle bloccate.
 			if offset.x != 0 and offset.y != 0:
 				if _blocked[_index(current + Vector2i(offset.x, 0))] or _blocked[_index(current + Vector2i(0, offset.y))]:
 					continue
