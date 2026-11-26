@@ -4,6 +4,10 @@
 [ext_resource type="Texture2D" uid="uid://djgbxf6awj8q0" path="res://Assets/Mesh/Textures/TrimGroundPixel.png" id="2_mu7li"]
 [ext_resource type="PackedScene" uid="uid://btsqcbfyy8kdx" path="res://Assets/Mesh/Fabbrica.blend" id="3_soyv5"]
 [ext_resource type="PackedScene" uid="uid://cac74e3gff1ci" path="res://Assets/Mesh/Rimorchio.blend" id="4_mu7li"]
+[ext_resource type="PackedScene" uid="uid://b2po2vbggdmkc" path="res://Assets/Mesh/OrsolicchiShop.blend" id="5_athjg"]
+[ext_resource type="PackedScene" uid="uid://dj2qthjq5mqpf" path="res://Assets/Mesh/Orsolicchi.blend" id="6_hjjke"]
+[ext_resource type="PackedScene" uid="uid://bc7pqn6rnroep" path="res://Assets/Mesh/Fabbrica001.blend" id="7_stpb1"]
+[ext_resource type="PackedScene" uid="uid://c7i5mclg6tbu5" path="res://Assets/Mesh/Capannoni.blend" id="8_hgb7i"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_npkn0"]
 albedo_texture = ExtResource("2_mu7li")
@@ -11,6 +15,56 @@ uv1_scale = Vector3(1, 0.2, 1)
 
 [sub_resource type="QuadMesh" id="QuadMesh_b0ixl"]
 material = SubResource("StandardMaterial3D_npkn0")
+size = Vector2(10, 10)
+orientation = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_athjg"]
+albedo_texture = ExtResource("2_mu7li")
+uv1_scale = Vector3(1, 0.2, 1)
+uv1_offset = Vector3(0, 0.2, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_hjjke"]
+material = SubResource("StandardMaterial3D_athjg")
+size = Vector2(10, 10)
+orientation = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hjjke"]
+albedo_texture = ExtResource("2_mu7li")
+uv1_scale = Vector3(0.45, 0.2, 1)
+uv1_offset = Vector3(0, 0.2, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_stpb1"]
+material = SubResource("StandardMaterial3D_hjjke")
+size = Vector2(10, 10)
+orientation = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stpb1"]
+albedo_texture = ExtResource("2_mu7li")
+uv1_scale = Vector3(1, 0.2, 1)
+uv1_offset = Vector3(0, 0.8, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_hgb7i"]
+material = SubResource("StandardMaterial3D_stpb1")
+size = Vector2(10, 10)
+orientation = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_22lxn"]
+albedo_texture = ExtResource("2_mu7li")
+uv1_scale = Vector3(1, 0.2, 1)
+uv1_offset = Vector3(0, 0.2, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_ts2w2"]
+material = SubResource("StandardMaterial3D_22lxn")
+size = Vector2(10, 10)
+orientation = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k8fv0"]
+albedo_texture = ExtResource("2_mu7li")
+uv1_scale = Vector3(1, 0.2, 1)
+uv1_offset = Vector3(0, 0.2, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_cabs4"]
+material = SubResource("StandardMaterial3D_k8fv0")
 size = Vector2(10, 10)
 orientation = 1
 
@@ -28,14 +82,229 @@ orientation = 1
 [node name="InputController" type="Node" parent="." unique_id=1673638727 node_paths=PackedStringArray("camera")]
 script = ExtResource("1_jjjjw")
 camera = NodePath("../Camera3D")
-pan_limit_bottom = Vector2(-60, 15)
-pan_limit_top = Vector2(10, 15)
+pan_limit_bottom = Vector2(-50, 12)
+pan_limit_top = Vector2(5, 16)
 
 [node name="Ground" type="Node3D" parent="." unique_id=1551168083]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, -5)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ground" unique_id=546646400]
 mesh = SubResource("QuadMesh_b0ixl")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D16" type="MeshInstance3D" parent="Ground" unique_id=424975059]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.348198, 0, -9.952494)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D17" type="MeshInstance3D" parent="Ground" unique_id=1683636373]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.637001, 0, -9.952494)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D18" type="MeshInstance3D" parent="Ground" unique_id=1676668214]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.348198, 0, -19.93112)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D19" type="MeshInstance3D" parent="Ground" unique_id=482663650]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.637001, 0, -19.93112)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D20" type="MeshInstance3D" parent="Ground" unique_id=1694923895]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.637306, 0, -9.952494)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D21" type="MeshInstance3D" parent="Ground" unique_id=1649289028]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.637306, 0, -19.93112)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D22" type="MeshInstance3D" parent="Ground" unique_id=935884182]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.61956, 0, -9.952494)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D23" type="MeshInstance3D" parent="Ground" unique_id=645778626]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.61956, 0, -19.93112)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D32" type="MeshInstance3D" parent="Ground" unique_id=591027294]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46.211315, 0, -9.952494)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D33" type="MeshInstance3D" parent="Ground" unique_id=2083241283]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.226116, 0, -9.952494)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D34" type="MeshInstance3D" parent="Ground" unique_id=106887585]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46.211315, 0, -19.93112)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D35" type="MeshInstance3D" parent="Ground" unique_id=2059768337]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.226116, 0, -19.93112)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D40" type="MeshInstance3D" parent="Ground" unique_id=485482910]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -66.14378, 0, -9.952494)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D41" type="MeshInstance3D" parent="Ground" unique_id=1773572816]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -56.15859, 0, -9.952494)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D42" type="MeshInstance3D" parent="Ground" unique_id=1585666393]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -66.14378, 0, -19.93112)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D43" type="MeshInstance3D" parent="Ground" unique_id=1542390780]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -56.15859, 0, -19.93112)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D44" type="MeshInstance3D" parent="Ground" unique_id=1700517854]
+transform = Transform3D(0.4, 0, 0, 0, 1, 0, 0, 0, 1, -82.99617, 0, -9.952494)
+mesh = SubResource("QuadMesh_stpb1")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D46" type="MeshInstance3D" parent="Ground" unique_id=972424215]
+transform = Transform3D(0.4, 0, 0, 0, 1, 0, 0, 0, 1, -83.050064, 0, -19.921658)
+mesh = SubResource("QuadMesh_stpb1")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D45" type="MeshInstance3D" parent="Ground" unique_id=1489282440]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76.05893, 0, -9.952494)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D47" type="MeshInstance3D" parent="Ground" unique_id=620424370]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76.05893, 0, -19.93112)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D36" type="MeshInstance3D" parent="Ground" unique_id=1250253541]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.225811, 0, -9.952494)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D37" type="MeshInstance3D" parent="Ground" unique_id=1345754731]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.225811, 0, -19.93112)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D38" type="MeshInstance3D" parent="Ground" unique_id=1368528283]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.243557, 0, -9.952494)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D39" type="MeshInstance3D" parent="Ground" unique_id=1895257248]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.243557, 0, -19.93112)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D24" type="MeshInstance3D" parent="Ground" unique_id=939914540]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.004129, 0, 10.003423)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D25" type="MeshInstance3D" parent="Ground" unique_id=2047130637]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.004129, 0, 0.024796486)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D26" type="MeshInstance3D" parent="Ground" unique_id=526099363]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.004129, 0, 29.994053)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D28" type="MeshInstance3D" parent="Ground" unique_id=942386664]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.044836044, 0, 29.994053)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D31" type="MeshInstance3D" parent="Ground" unique_id=928447354]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.914312, 0, 29.994053)
+mesh = SubResource("QuadMesh_hjjke")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D29" type="MeshInstance3D" parent="Ground" unique_id=608761276]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -53.478477, 0, 29.994053)
+mesh = SubResource("QuadMesh_hgb7i")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D48" type="MeshInstance3D" parent="Ground" unique_id=2069438222]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90.02387, 0, 22.958672)
+mesh = SubResource("QuadMesh_hgb7i")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D49" type="MeshInstance3D" parent="Ground" unique_id=2014785000]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100.01908, 0, 22.958672)
+mesh = SubResource("QuadMesh_hgb7i")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D50" type="MeshInstance3D" parent="Ground" unique_id=1547958618]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90.02387, 0, 3.0017529)
+mesh = SubResource("QuadMesh_hgb7i")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D51" type="MeshInstance3D" parent="Ground" unique_id=1689517361]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100.01908, 0, 3.0017529)
+mesh = SubResource("QuadMesh_hgb7i")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D52" type="MeshInstance3D" parent="Ground" unique_id=322281639]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -89.993866, 0, -6.95)
+mesh = SubResource("QuadMesh_hgb7i")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D53" type="MeshInstance3D" parent="Ground" unique_id=1818387496]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -99.98886, 0, -6.95)
+mesh = SubResource("QuadMesh_hgb7i")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D54" type="MeshInstance3D" parent="Ground" unique_id=179470028]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -89.993866, 0, -16.930065)
+mesh = SubResource("QuadMesh_hgb7i")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D55" type="MeshInstance3D" parent="Ground" unique_id=983203106]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -99.98886, 0, -16.930065)
+mesh = SubResource("QuadMesh_hgb7i")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D56" type="MeshInstance3D" parent="Ground" unique_id=1439412619]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -109.95271, 0, 3.0017529)
+mesh = SubResource("QuadMesh_hgb7i")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D57" type="MeshInstance3D" parent="Ground" unique_id=1287509960]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -109.92249, 0, -6.95)
+mesh = SubResource("QuadMesh_hgb7i")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D58" type="MeshInstance3D" parent="Ground" unique_id=1784374548]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -109.92249, 0, -16.930065)
+mesh = SubResource("QuadMesh_hgb7i")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D30" type="MeshInstance3D" parent="Ground" unique_id=1517687556]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -43.486443, 0, 29.994053)
+mesh = SubResource("QuadMesh_hgb7i")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D27" type="MeshInstance3D" parent="Ground" unique_id=1589683964]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.004129, 0, 20.003147)
+mesh = SubResource("QuadMesh_hjjke")
 skeleton = NodePath("../..")
 
 [node name="MeshInstance3D4" type="MeshInstance3D" parent="Ground" unique_id=655925059]
@@ -145,6 +414,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 10)
 mesh = SubResource("QuadMesh_b0ixl")
 skeleton = NodePath("../..")
 
+[node name="MeshInstance3D13" type="MeshInstance3D" parent="Ground2" unique_id=1980719638]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.003532, -0.03557968, 12.972217)
+mesh = SubResource("QuadMesh_ts2w2")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D14" type="MeshInstance3D" parent="Ground2" unique_id=848461267]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -49.975204, -0.03557968, 12.972217)
+mesh = SubResource("QuadMesh_cabs4")
+skeleton = NodePath("../..")
+
 [node name="MeshInstance3D10" type="MeshInstance3D" parent="Ground2" unique_id=1361329840]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 20)
 mesh = SubResource("QuadMesh_b0ixl")
@@ -171,10 +450,10 @@ mesh = SubResource("QuadMesh_b0ixl")
 skeleton = NodePath("../..")
 
 [node name="Fabbrica" parent="." unique_id=1328202481 instance=ExtResource("3_soyv5")]
-transform = Transform3D(-0.021116674, 0, -0.9997771, 0, 1, 0, 0.9997771, 0, -0.021116674, 12.631, 0, 5.332)
+transform = Transform3D(-0.021116674, 0, -0.9997771, 0, 1, 0, 0.9997771, 0, -0.021116674, 12.631, 0, 6.7063284)
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1737000343]
-transform = Transform3D(0.98480725, -0.15788728, 0.072286405, 0, 0.41628107, 0.909236, -0.17364809, -0.89542323, 0.40995654, 10.1007, 12.2916, 9.70076)
+transform = Transform3D(0.9848078, -0.15788719, 0.07228641, 0, 0.41628087, 0.90923613, -0.17364818, -0.8954228, 0.4099566, 0, 12.5, 11)
 fov = 88.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1218848809]
@@ -183,4 +462,31 @@ light_color = Color(1, 0.811765, 0.756863, 1)
 shadow_enabled = true
 
 [node name="Rimorchio" parent="." unique_id=1116052971 instance=ExtResource("4_mu7li")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.214615, 1.9073486e-06, 13.881384)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -30.399164, 1.9073486e-06, -6.8499575)
+
+[node name="Rimorchio2" parent="." unique_id=1546640878 instance=ExtResource("4_mu7li")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -27.225138, 1.9073486e-06, -6.4485607)
+
+[node name="Rimorchio3" parent="." unique_id=1921573907 instance=ExtResource("4_mu7li")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.805653, 0, 18.055086)
+
+[node name="OrsolicchiShop" parent="." unique_id=128162978 instance=ExtResource("5_athjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.42999, 0, -5.8295994)
+
+[node name="OrsolicchiShop2" parent="." unique_id=154101326 instance=ExtResource("5_athjg")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -4.822596, 0, 18.986757)
+
+[node name="Orsolicchi" parent="." unique_id=2032088873 instance=ExtResource("6_hjjke")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.05247, 0, -5.520111)
+
+[node name="Fabbrica001" parent="." unique_id=507848433 instance=ExtResource("7_stpb1")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -22.542912, 0, 18.721054)
+
+[node name="Fabbrica002" parent="." unique_id=1826001466 instance=ExtResource("7_stpb1")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -60, 0, -2.385)
+
+[node name="Capannoni" parent="." unique_id=1944645317 instance=ExtResource("8_hgb7i")]
+transform = Transform3D(0.9998903, 0, 0.014812643, 0, 1, 0, -0.014812643, 0, 0.9998903, -3.133111, 0, -10.604319)
+
+[node name="Capannoni2" parent="." unique_id=764928864 instance=ExtResource("8_hgb7i")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -52.16427, 0, 25.013914)
