@@ -5,6 +5,7 @@ extends Node
 @export var target: Node3D
 @export var flowfield: FlowField3D
 @export var isEndless: bool
+@export var debug_enemy_health_bars: bool = false
 
 var enemyflow_operaio: Array[int]
 var enemyflow_impiegato: Array[int]
@@ -54,6 +55,7 @@ func spawn_enemy_wave(spawn_area_shape: Node3D) -> void:
 	for _i in range(wave_size):
 		var enemy := enemy_scene.instantiate()
 		add_child(enemy)
+		enemy.set_debug_health_bar_enabled(debug_enemy_health_bars)
 		GameController.CurrentWorkers+=1
 		var area_extents := _get_spawn_area_extents(spawn_area_shape)
 		var local_offset := Vector3(

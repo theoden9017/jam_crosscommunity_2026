@@ -12,6 +12,13 @@ extends CharacterBody3D
 @export var stuck_timeout: float = 5.0
 @export var minimum_progress_distance: float = 0.25
 @export var recovery_duration: float = 1.2
+@export var max_health: float = 100.0
+
+var current_health: float
+var _debug_health_bar_enabled := false
+var _health_bar_root: Node3D
+var _health_bar_fill: MeshInstance3D
+var _health_bar_fill_mesh: BoxMesh
 
 # Riferimenti al campo di flusso e alla forma che determina il despawn.
 var _flow_field: Node
@@ -31,6 +38,7 @@ var _recovery_direction := Vector3.ZERO
 
 # Assegna a ogni nemico una lieve variazione individuale di traiettoria e velocità.
 func _ready() -> void:
+	current_health = max_health
 	_wander_phase = randf_range(0.0, TAU)
 	_lane_bias = randf_range(-crowd_variation, crowd_variation)
 	_speed_factor = randf_range(0.92, 1.08)
@@ -41,6 +49,66 @@ func _ready() -> void:
 	# Offset temporale casuale
 	var random_offset = randf_range(0.0, 1.1)
 	anim_player.seek(random_offset, true)
+	_update_health_bar()
+
+
+# Consente al MatchController di attivare la visualizzazione sugli enemy generati.
+func set_debug_health_bar_enabled(enabled: bool) -> void:
+	_debug_health_bar_enabled = enabled
+	if enabled and not is_instance_valid(_health_bar_root):
+		_create_health_bar()
+	if is_instance_valid(_health_bar_root):
+		_health_bar_root.visible = enabled
+	_update_health_bar()
+
+
+# Applica danno e rimuove il nemico quando gli HP arrivano a zero.
+func take_damage(amount: float) -> void:
+	if amount <= 0.0 or current_health <= 0.0:
+		return
+	current_health = maxf(0.0, current_health - amount)
+	_update_health_bar()
+	if current_health <= 0.0:
+		queue_free()
+
+
+func _create_health_bar() -> void:
+	_health_bar_root = Node3D.new()
+	_health_bar_root.name = "DebugHealthBar"
+	_health_bar_root.position = Vector3(0.0, 2.0, 0.0)
+	_health_bar_root.visible = _debug_health_bar_enabled
+	add_child(_health_bar_root)
+
+	var background := MeshInstance3D.new()
+	var background_mesh := BoxMesh.new()
+	background_mesh.size = Vector3(0.8, 0.08, 0.025)
+	background.mesh = background_mesh
+	background.material_override = _make_health_bar_material(Color(0.12, 0.12, 0.12, 0.9))
+	_health_bar_root.add_child(background)
+
+	_health_bar_fill = MeshInstance3D.new()
+	_health_bar_fill_mesh = BoxMesh.new()
+	_health_bar_fill_mesh.size = Vector3(0.8, 0.08, 0.03)
+	_health_bar_fill.mesh = _health_bar_fill_mesh
+	_health_bar_fill.material_override = _make_health_bar_material(Color(0.2, 0.9, 0.25, 1.0))
+	_health_bar_root.add_child(_health_bar_fill)
+
+
+func _make_health_bar_material(color: Color) -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	material.albedo_color = color
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
+	return material
+
+
+func _update_health_bar() -> void:
+	if not is_instance_valid(_health_bar_fill):
+		return
+	var ratio := clampf(current_health / maxf(max_health, 0.001), 0.0, 1.0)
+	var fill_width := 0.8 * ratio
+	_health_bar_fill_mesh.size.x = fill_width
+	_health_bar_fill.position.x = -0.4 + fill_width * 0.5
 
 # Salva la posizione del target; utile anche se il nodo target si muove.
 func set_target_position(position: Vector3) -> void:

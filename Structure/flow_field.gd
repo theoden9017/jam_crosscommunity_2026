@@ -35,6 +35,7 @@ var _shape: Shape3D
 
 
 @export_range(0.0, 3.0, 0.1) var blocks_clearance: float = 0.6
+@export_range(0.0, 1.0, 0.05) var placed_blocks_clearance: float = 0.1
 
 var grid_origin: Vector2
 var grid_width: float
@@ -197,7 +198,7 @@ func _mark_blocked_cells(blocks: Node3D) -> void:
 	for z in range(grid_height):
 		for x in range(grid_width):
 			var cell := Vector2i(x, z)
-			if _cell_intersects_footprints(cell, footprints):
+			if _cell_intersects_footprints(cell, footprints, placed_blocks_clearance):
 				_blocked[_index(cell)] = true
 
 
@@ -211,10 +212,16 @@ func _get_node_footprints(node: Node3D) -> Array[PackedVector2Array]:
 			if collision.shape is BoxShape3D:
 				var box := collision.shape as BoxShape3D
 				var corners := PackedVector2Array()
-				for sx in [-1.0, 1.0]:
-					for sz in [-1.0, 1.0]:
-						var point := collision.global_transform * Vector3(box.size.x * sx * 0.5, 0.0, box.size.z * sz * 0.5)
-						corners.append(Vector2(point.x, point.z))
+				# L'ordine deve seguire il perimetro: l'ordine annidato precedente
+				# produceva un quadrilatero a farfalla per le box ruotate.
+				for corner in [
+					Vector3(-box.size.x, 0.0, -box.size.z) * 0.5,
+					Vector3(box.size.x, 0.0, -box.size.z) * 0.5,
+					Vector3(box.size.x, 0.0, box.size.z) * 0.5,
+					Vector3(-box.size.x, 0.0, box.size.z) * 0.5
+				]:
+					var point: Vector3 = collision.global_transform * corner
+					corners.append(Vector2(point.x, point.z))
 				result.append(corners)
 		for child in current.get_children():
 			pending.append(child)
@@ -237,9 +244,9 @@ func _get_node_footprints(node: Node3D) -> Array[PackedVector2Array]:
 	return result
 
 
-func _cell_intersects_footprints(cell: Vector2i, footprints: Array[PackedVector2Array]) -> bool:
+func _cell_intersects_footprints(cell: Vector2i, footprints: Array[PackedVector2Array], clearance: float) -> bool:
 	var center := cell_to_world(cell)
-	var half := cell_size * 0.5 + blocks_clearance
+	var half := cell_size * 0.5 + clearance
 	var square := [center + Vector2(-half, -half), center + Vector2(half, -half), center + Vector2(half, half), center + Vector2(-half, half)]
 	for polygon in footprints:
 		for point in polygon:
@@ -599,30 +606,32 @@ func can_place_blocks(world_position: Vector3, yaw: float, placement_node: Node3
 			if absf(offset.dot(axis_x)) <= footprint.x + blocks_clearance + cell_projection_x and absf(offset.dot(axis_z)) <= footprint.y + blocks_clearance + cell_projection_z:
 				test_blocked[_index(cell)] = true
 
-	# Trova una cella libera per il target, come fa il calcolo del flow field.
-	var goal := _clamp_cell(world_to_cell(target.global_position))
-	if test_blocked[_index(goal)]:
-		var goal_found := false
+	# La preview verifica la connettività da tutte le celle libere nell'area target.
+	var goals := _get_target_cells(target)
+	if goals.is_empty():
+		var goal := _clamp_cell(world_to_cell(target.global_position))
 		for radius in range(1, maxi(grid_width, grid_height)):
 			for z in range(goal.y - radius, goal.y + radius + 1):
 				for x in range(goal.x - radius, goal.x + radius + 1):
 					var candidate := Vector2i(x, z)
 					if _inside_grid(candidate) and not test_blocked[_index(candidate)]:
-						goal = candidate
-						goal_found = true
-						break
-				if goal_found:
+						goals.append(candidate)
+				if not goals.is_empty():
 					break
-			if goal_found:
+			if not goals.is_empty():
 				break
-		if not goal_found:
+		if goals.is_empty():
 			return false
 
-	# Esegue una BFS dal target per marcare tutte le celle ancora raggiungibili.
+	# Esegue una BFS multi-sorgente dal target per marcare le celle raggiungibili.
 	var reachable := PackedByteArray()
 	reachable.resize(grid_width * grid_height)
-	var queue: Array[Vector2i] = [goal]
-	reachable[_index(goal)] = 1
+	var queue: Array[Vector2i] = []
+	for goal in goals:
+		if test_blocked[_index(goal)]:
+			continue
+		reachable[_index(goal)] = 1
+		queue.append(goal)
 	var queue_cursor := 0
 	while queue_cursor < queue.size():
 		var current := queue[queue_cursor]
