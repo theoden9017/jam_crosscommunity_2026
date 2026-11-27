@@ -33,13 +33,13 @@ size = Vector3(12.514221, 1, 6.145388)
 size = Vector3(12.914688, 1, 2.7838445)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_3bxax"]
-size = Vector3(30.302853, 1, 14.9802265)
+size = Vector3(30.302853, 1, 14.636109)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_o7j18"]
 size = Vector3(9.380034, 1, 4.80811)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vjt2r"]
-size = Vector3(32.4469, 1, 12.719606)
+size = Vector3(32.4469, 5.713867, 12.203749)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_uqxu0"]
 size = Vector3(7.5886917, 1, 26.4292)
@@ -48,7 +48,7 @@ size = Vector3(7.5886917, 1, 26.4292)
 size = Vector3(0.481155, 1, 8.4043)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fibqn"]
-size = Vector3(0.481155, 1, 8.4043)
+size = Vector3(0.481155, 1, 10.29883)
 
 [sub_resource type="BoxMesh" id="BoxMesh_npkn0"]
 size = Vector3(40, 0, 30)
@@ -101,6 +101,7 @@ script = ExtResource("4_e1rv4")
 enemy_scene = ExtResource("2_m80yq")
 target = NodePath("../Target")
 flowfield = NodePath("../FlowFieldBounds")
+debug_enemy_health_bars = true
 
 [node name="InputController" type="Node" parent="." unique_id=2133521093 node_paths=PackedStringArray("camera")]
 script = ExtResource("4_3bxax")
@@ -146,14 +147,15 @@ shadow_enabled = true
 transform = Transform3D(64.697, 0, 0, 0, 1, 0, 0, 0, 35.0741, -8.844, 0, 1.71)
 script = ExtResource("2_l6r6a")
 shape = SubResource("BoxShape3D_qwfpk")
-cell_size = 0.7
+cell_size = 1.2
 flow_arrow_height = 0.5
-blocks_clearance = 0.9
+blocks_clearance = 0.8
+placed_blocks_clearance = 0.3
 preview_color = Color(0.909804, 0.72549, 0.180392, 0.0196078)
 metadata/_custom_type_script = "uid://5qa3vuou3frv"
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1371415145]
-transform = Transform3D(0.977976, 0.189829, -0.0867587, 3.44211e-09, 0.41568, 0.909511, 0.208715, -0.889481, 0.406525, 10.1007, 12.2916, 9.70076)
+transform = Transform3D(0.9481701, 0.28900918, -0.13208887, 2.7947337e-08, 0.41567922, 0.9095113, 0.31776318, -0.8623715, 0.39413428, 10.1007, 12.2916, 9.70076)
 fov = 88.8
 
 [node name="Target" type="Node3D" parent="." unique_id=2017365745]
@@ -180,7 +182,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.3345013, 0, 0.3947469)
 shape = SubResource("BoxShape3D_oaf1g")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Bounds" unique_id=2070586616 groups=["blocks"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5428133, 0, -17.094559)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5428133, 0, -17.266617)
 shape = SubResource("BoxShape3D_3bxax")
 
 [node name="CollisionShape3D6" type="CollisionShape3D" parent="Bounds" unique_id=1159769467 groups=["blocks"]]
@@ -188,7 +190,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.82042, 0, -12.0085)
 shape = SubResource("BoxShape3D_o7j18")
 
 [node name="CollisionShape3D3" type="CollisionShape3D" parent="Bounds" unique_id=1767726291 groups=["blocks"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.74347, 0, 16.514448)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.74347, 0.68603516, 16.772377)
 shape = SubResource("BoxShape3D_vjt2r")
 
 [node name="CollisionShape3D4" type="CollisionShape3D" parent="Bounds" unique_id=415145330 groups=["blocks"]]
@@ -200,7 +202,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.435944, 0, -6.81374)
 shape = SubResource("BoxShape3D_y1n5f")
 
 [node name="CancelloSud" type="CollisionShape3D" parent="Bounds" unique_id=1636702516 groups=["blocks"]]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 15.1706, 0, 10.4243)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 16.117865, 0, 11.393974)
 shape = SubResource("BoxShape3D_fibqn")
 
 [node name="GreyBox" type="Node3D" parent="." unique_id=974473303]
@@ -217,7 +219,7 @@ mesh = SubResource("BoxMesh_7bpeb")
 material = SubResource("StandardMaterial3D_pqjnt")
 
 [node name="CSGMesh3D6" type="CSGMesh3D" parent="GreyBox" unique_id=1046123055]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.85468, 0, 10.3778)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.85468, 0, 11.372519)
 mesh = SubResource("BoxMesh_e1rv4")
 material = SubResource("StandardMaterial3D_oaf1g")
 
@@ -247,7 +249,7 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13.
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 23.335, 0, 4.319)
 
 [node name="Orsolicchi" parent="Edifici" unique_id=1713909985 instance=ExtResource("11_dtnrq")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 6.562, 0, 16.258)
+transform = Transform3D(-1, 0, -8.742277e-08, 0, 1, 0, 8.742277e-08, 0, -1, 5.2679, 0, 15.634333)
 
 [node name="Rimorchio" parent="Edifici" unique_id=2125480288 instance=ExtResource("12_pe4bh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.374, 0, 0.339)
