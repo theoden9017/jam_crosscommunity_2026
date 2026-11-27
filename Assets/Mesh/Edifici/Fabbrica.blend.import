@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://ccw3qx6lovde8"
-path="res://.godot/imported/Magazzino.blend-56084fcf4fec40ea7a129dc87516a103.scn"
+uid="uid://btsqcbfyy8kdx"
+path="res://.godot/imported/Fabbrica.blend-43405f27c369494d6b9f176bcd866a8d.scn"
 
 [deps]
 
-source_file="res://Assets/Mesh/Magazzino.blend"
-dest_files=["res://.godot/imported/Magazzino.blend-56084fcf4fec40ea7a129dc87516a103.scn"]
+source_file="res://Assets/Mesh/Edifici/Fabbrica.blend"
+dest_files=["res://.godot/imported/Fabbrica.blend-43405f27c369494d6b9f176bcd866a8d.scn"]
 
 [params]
 

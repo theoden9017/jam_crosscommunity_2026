@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://ba08ucl3ri17y"
-path="res://.godot/imported/BuildingsStatiche.blend-9f4071b129bf2bb194960f6de1deb614.scn"
+uid="uid://c7i5mclg6tbu5"
+path="res://.godot/imported/Capannoni.blend-68a7564db0b8f99e7a99e1323b78cd01.scn"
 
 [deps]
 
-source_file="res://Assets/Mesh/BuildingsStatiche.blend"
-dest_files=["res://.godot/imported/BuildingsStatiche.blend-9f4071b129bf2bb194960f6de1deb614.scn"]
+source_file="res://Assets/Mesh/Edifici/Capannoni.blend"
+dest_files=["res://.godot/imported/Capannoni.blend-68a7564db0b8f99e7a99e1323b78cd01.scn"]
 
 [params]
 

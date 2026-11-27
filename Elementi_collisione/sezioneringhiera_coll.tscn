@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://dyp7rb11kbinw"]
+
+[ext_resource type="PackedScene" uid="uid://bexwsvl45s08" path="res://Assets/Mesh/Edifici/sezioneringhiera.fbx" id="1_wck1o"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_uvxip"]
+size = Vector3(0.0019999999, 0.0014901072, 0.023107307)
+
+[node name="sezioneringhiera" unique_id=1451621177 instance=ExtResource("1_wck1o")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Plane_002" parent_id_path=PackedInt32Array(2140231488) index="0" unique_id=1776107031]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0009999998, 0.0007450536, 0.0115536535)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Plane_002/StaticBody3D" index="0" unique_id=1592041398]
+shape = SubResource("BoxShape3D_uvxip")

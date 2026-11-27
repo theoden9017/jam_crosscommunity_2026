@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://cy8w0626t8ipk"]
 
-[ext_resource type="PackedScene" uid="uid://c7i5mclg6tbu5" path="res://Assets/Mesh/Capannoni.blend" id="1_pu7gi"]
-[ext_resource type="PackedScene" uid="uid://bc7pqn6rnroep" path="res://Assets/Mesh/Fabbrica001.blend" id="2_2lwtv"]
-[ext_resource type="PackedScene" uid="uid://btsqcbfyy8kdx" path="res://Assets/Mesh/Fabbrica.blend" id="3_j16qr"]
-[ext_resource type="PackedScene" uid="uid://ccw3qx6lovde8" path="res://Assets/Mesh/Magazzino.blend" id="4_iduvr"]
-[ext_resource type="PackedScene" uid="uid://dj2qthjq5mqpf" path="res://Assets/Mesh/Orsolicchi.blend" id="5_yb6ns"]
-[ext_resource type="PackedScene" uid="uid://b2po2vbggdmkc" path="res://Assets/Mesh/OrsolicchiShop.blend" id="6_1flx8"]
-[ext_resource type="PackedScene" uid="uid://cac74e3gff1ci" path="res://Assets/Mesh/Rimorchio.blend" id="7_ugh04"]
-[ext_resource type="PackedScene" uid="uid://c6mmujur8dbt3" path="res://Assets/Mesh/TostopanSRL.blend" id="8_d4qkx"]
+[ext_resource type="PackedScene" uid="uid://c7i5mclg6tbu5" path="res://Assets/Mesh/Edifici/Capannoni.blend" id="1_pu7gi"]
+[ext_resource type="PackedScene" uid="uid://bc7pqn6rnroep" path="res://Assets/Mesh/Edifici/Fabbrica001.blend" id="2_2lwtv"]
+[ext_resource type="PackedScene" uid="uid://btsqcbfyy8kdx" path="res://Assets/Mesh/Edifici/Fabbrica.blend" id="3_j16qr"]
+[ext_resource type="PackedScene" uid="uid://ccw3qx6lovde8" path="res://Assets/Mesh/Edifici/Magazzino.blend" id="4_iduvr"]
+[ext_resource type="PackedScene" uid="uid://dj2qthjq5mqpf" path="res://Assets/Mesh/Edifici/Orsolicchi.blend" id="5_yb6ns"]
+[ext_resource type="PackedScene" uid="uid://b2po2vbggdmkc" path="res://Assets/Mesh/Edifici/OrsolicchiShop.blend" id="6_1flx8"]
+[ext_resource type="PackedScene" uid="uid://cac74e3gff1ci" path="res://Assets/Mesh/Edifici/Rimorchio.blend" id="7_ugh04"]
+[ext_resource type="PackedScene" uid="uid://c6mmujur8dbt3" path="res://Assets/Mesh/Edifici/TostopanSRL.blend" id="8_d4qkx"]
 
 [node name="Node3D" type="Node3D"]
 

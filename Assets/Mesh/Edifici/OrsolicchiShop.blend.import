@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bc7pqn6rnroep"
-path="res://.godot/imported/Fabbrica001.blend-9080ab8b123f541e376cc7ecdeeff2af.scn"
+uid="uid://b2po2vbggdmkc"
+path="res://.godot/imported/OrsolicchiShop.blend-e85f650831da3e46615915c1b2dc8000.scn"
 
 [deps]
 
-source_file="res://Assets/Mesh/Fabbrica001.blend"
-dest_files=["res://.godot/imported/Fabbrica001.blend-9080ab8b123f541e376cc7ecdeeff2af.scn"]
+source_file="res://Assets/Mesh/Edifici/OrsolicchiShop.blend"
+dest_files=["res://.godot/imported/OrsolicchiShop.blend-e85f650831da3e46615915c1b2dc8000.scn"]
 
 [params]
 

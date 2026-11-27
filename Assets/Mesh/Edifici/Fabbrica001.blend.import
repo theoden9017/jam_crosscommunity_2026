@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://cac74e3gff1ci"
-path="res://.godot/imported/Rimorchio.blend-2ad6af49bdd03a9846c58c95cd5be71f.scn"
+uid="uid://bc7pqn6rnroep"
+path="res://.godot/imported/Fabbrica001.blend-dda8a556df534faaec1a6bbf336bc7e6.scn"
 
 [deps]
 
-source_file="res://Assets/Mesh/Rimorchio.blend"
-dest_files=["res://.godot/imported/Rimorchio.blend-2ad6af49bdd03a9846c58c95cd5be71f.scn"]
+source_file="res://Assets/Mesh/Edifici/Fabbrica001.blend"
+dest_files=["res://.godot/imported/Fabbrica001.blend-dda8a556df534faaec1a6bbf336bc7e6.scn"]
 
 [params]
 

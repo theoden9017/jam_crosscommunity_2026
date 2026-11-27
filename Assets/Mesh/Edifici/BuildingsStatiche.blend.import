@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://c6mmujur8dbt3"
-path="res://.godot/imported/TostopanSRL.blend-a84d8e9821462d9076a0c21578ee7816.scn"
+uid="uid://ba08ucl3ri17y"
+path="res://.godot/imported/BuildingsStatiche.blend-2dd49f1a8ccffc14c96e88e5c2d40584.scn"
 
 [deps]
 
-source_file="res://Assets/Mesh/TostopanSRL.blend"
-dest_files=["res://.godot/imported/TostopanSRL.blend-a84d8e9821462d9076a0c21578ee7816.scn"]
+source_file="res://Assets/Mesh/Edifici/BuildingsStatiche.blend"
+dest_files=["res://.godot/imported/BuildingsStatiche.blend-2dd49f1a8ccffc14c96e88e5c2d40584.scn"]
 
 [params]
 

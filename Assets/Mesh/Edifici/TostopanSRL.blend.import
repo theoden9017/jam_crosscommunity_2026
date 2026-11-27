@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://dj2qthjq5mqpf"
-path="res://.godot/imported/Orsolicchi.blend-9e77eb629d239b45701d273d7e981338.scn"
+uid="uid://c6mmujur8dbt3"
+path="res://.godot/imported/TostopanSRL.blend-2fd26a927bf3da0c9efc15ed05431b22.scn"
 
 [deps]
 
-source_file="res://Assets/Mesh/Orsolicchi.blend"
-dest_files=["res://.godot/imported/Orsolicchi.blend-9e77eb629d239b45701d273d7e981338.scn"]
+source_file="res://Assets/Mesh/Edifici/TostopanSRL.blend"
+dest_files=["res://.godot/imported/TostopanSRL.blend-2fd26a927bf3da0c9efc15ed05431b22.scn"]
 
 [params]
 
