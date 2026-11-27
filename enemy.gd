@@ -1,5 +1,7 @@
 extends CharacterBody3D
 
+@onready var anim_player: AnimationPlayer = $AnimationPlayer
+
 
 # Velocità massima e regolarizzazione di accelerazione e sterzata.
 @export var move_speed: float = 3.0
@@ -33,7 +35,12 @@ func _ready() -> void:
 	_lane_bias = randf_range(-crowd_variation, crowd_variation)
 	_speed_factor = randf_range(0.92, 1.08)
 	_progress_check_position = global_position
+	anim_player.get_animation("walking").loop_mode = Animation.LOOP_LINEAR
+	anim_player.play("walking")
 
+	# Offset temporale casuale
+	var random_offset = randf_range(0.0, 1.1)
+	anim_player.seek(random_offset, true)
 
 # Salva la posizione del target; utile anche se il nodo target si muove.
 func set_target_position(position: Vector3) -> void:

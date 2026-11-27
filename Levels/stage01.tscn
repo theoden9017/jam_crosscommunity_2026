@@ -320,6 +320,36 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, 0)
 mesh = SubResource("QuadMesh_oaf1g")
 skeleton = NodePath("../..")
 
+[node name="MeshInstance3D19" type="MeshInstance3D" parent="Ground" unique_id=1982460793]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D20" type="MeshInstance3D" parent="Ground" unique_id=301882588]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, -10)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D21" type="MeshInstance3D" parent="Ground" unique_id=1855151564]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, -10)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D22" type="MeshInstance3D" parent="Ground" unique_id=578341480]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, -10)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D23" type="MeshInstance3D" parent="Ground" unique_id=136375100]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 0, -10)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D24" type="MeshInstance3D" parent="Ground" unique_id=959581353]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, -10)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
 [node name="MeshInstance3D17" type="MeshInstance3D" parent="Ground" unique_id=1993115253]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, 10)
 mesh = SubResource("QuadMesh_oaf1g")
@@ -347,6 +377,26 @@ skeleton = NodePath("../..")
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="Ground" unique_id=1029966511]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20.04561)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D25" type="MeshInstance3D" parent="Ground" unique_id=524151230]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 0)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D26" type="MeshInstance3D" parent="Ground" unique_id=1399992628]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, -10)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D27" type="MeshInstance3D" parent="Ground" unique_id=910064926]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 10.04561)
+mesh = SubResource("QuadMesh_oaf1g")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D28" type="MeshInstance3D" parent="Ground" unique_id=1637309169]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 20.04561)
 mesh = SubResource("QuadMesh_oaf1g")
 skeleton = NodePath("../..")
 
