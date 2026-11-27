@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://ch4m62yoxqhfj"]
+
+[ext_resource type="PackedScene" uid="uid://cac74e3gff1ci" path="res://Assets/Mesh/Edifici/Rimorchio.blend" id="1_em3c7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3ec1d"]
+size = Vector3(12.496348, 2.5, 2.75)
+
+[node name="Rimorchio" unique_id=1928162494 instance=ExtResource("1_em3c7")]
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="Rimorchio" parent_id_path=PackedInt32Array(334887716) index="1" unique_id=1671967448]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24817419, 1.25, -0.017585754)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rimorchio/StaticBody3D2" index="0" unique_id=1785572830]
+shape = SubResource("BoxShape3D_3ec1d")

@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://c7i5mclg6tbu5"
-path="res://.godot/imported/Capannoni.blend-f9b4c3f4a416d202a7e39515b285eb9a.scn"
+uid="uid://dj2qthjq5mqpf"
+path="res://.godot/imported/Orsolicchi.blend-065154b9cc3d6b227145d4d0be8c6d0e.scn"
 
 [deps]
 
-source_file="res://Assets/Mesh/Capannoni.blend"
-dest_files=["res://.godot/imported/Capannoni.blend-f9b4c3f4a416d202a7e39515b285eb9a.scn"]
+source_file="res://Assets/Mesh/Edifici/Orsolicchi.blend"
+dest_files=["res://.godot/imported/Orsolicchi.blend-065154b9cc3d6b227145d4d0be8c6d0e.scn"]
 
 [params]
 

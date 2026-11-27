@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://bsb5e84js0x6b"]
+
+[ext_resource type="PackedScene" uid="uid://drw4mpkimsae3" path="res://Assets/Mesh/Edifici/Ringhiera2M.fbx" id="1_yu3s2"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1m7gt"]
+size = Vector3(0.02, 0.0014901072, 0.023107307)
+
+[node name="Ringhiera2M" unique_id=1942193136 instance=ExtResource("1_yu3s2")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Plane_002" parent_id_path=PackedInt32Array(1959325207) index="0" unique_id=261439645]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, 0, 0.0115536535)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Plane_002/StaticBody3D" index="0" unique_id=1082909344]
+shape = SubResource("BoxShape3D_1m7gt")
