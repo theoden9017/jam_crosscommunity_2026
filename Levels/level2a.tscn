@@ -1,6 +1,12 @@
+<<<<<<< Updated upstream
 [gd_scene format=3 uid="uid://ckl4xljrjoba4"]
 
 [ext_resource type="Texture2D" uid="uid://djgbxf6awj8q0" path="res://Assets/Mesh/Edifici/textures/TrimGroundPixel.png" id="1_gf2qj"]
+=======
+[gd_scene format=3 uid="uid://cg58qd1xe4o2b"]
+
+[ext_resource type="Texture2D" path="res://Assets/Mesh/Edifici/textures/TrimGroundPixel.png" id="1_gf2qj"]
+>>>>>>> Stashed changes
 [ext_resource type="Script" uid="uid://b6tppg1fveuwk" path="res://Structure/input_controller.gd" id="2_qiy8d"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_npkn0"]
