@@ -1,11 +1,15 @@
 extends Node
 
-signal block_added
-# Gestisce anteprima e conferma del piazzamento delle barracks.
+# blocking = true se l'elemento piazzato modifica il flow field.
+signal block_added(blocking: bool)
+# Gestisce anteprima e conferma del piazzamento degli elementi.
 
 @onready var world: Node3D = get_parent()
 @onready var camera: Camera3D = world.get_node("Camera3D")
 @onready var flow_field_bounds: FlowField3D = $"../FlowFieldBounds"
+
+const COLOR_VALID := Color(0.2, 0.9, 0.35, 0.42)
+const COLOR_INVALID := Color(1.0, 0.15, 0.12, 0.48)
 
 var _ghost: Node3D
 var _obj: String
@@ -15,33 +19,43 @@ var _placement_is_valid := false
 
 
 const OBJECTS = {
-	"TOWER": {
-		"scene": preload("res://tower.tscn"),
-		"ghostname": "TowerGhost",
+	"STRILLONE": {
+		"scene": preload("res://placeable/strillone.tscn"),
+		"ghostname": "StrilGhost",
 		"blocking": false
 	},
-	"BLOCK": {
-		"scene": preload("res://block.tscn"),
-		"ghostname": "BlockGhost",
+	"VOLANTINATORE": {
+		"scene": preload("res://placeable/volantinatore.tscn"),
+		"ghostname": "VolantGhost",
+		"blocking": false
+	},
+	"STRISCIONE": {
+		"scene": preload("res://placeable/stricione.tscn"),
+		"ghostname": "StriscGhost",
+		"blocking": true
+	},
+	"GAZEBO": {
+		"scene": preload("res://placeable/gazebo.tscn"),
+		"ghostname": "GazebGhost",
 		"blocking": true
 	}
 }
 
 
-
-
-
-# Attiva la modalità costruzione e crea una copia trasparente della barracks.
+# Attiva la modalità costruzione e crea una copia trasparente dell'elemento.
 func begin_placement(obj: String) -> void:
 	if is_instance_valid(_ghost):
 		_ghost.queue_free()
 	_obj = obj
 	_ghost = OBJECTS[obj]["scene"].instantiate()
 	_ghost.name = OBJECTS[obj]["ghostname"]
+	# Il fantasma non deve processare né stare nella fisica: altrimenti la sua
+	# AreaInfluence danneggerebbe i nemici durante l'anteprima.
+	_ghost.process_mode = Node.PROCESS_MODE_DISABLED
 	world.add_child(_ghost)
 	_ghost.remove_from_group("blocks")
+	_ghost.remove_from_group("placeables")
 	_yaw = 0.0
-	_set_ghost_non_blocking()
 	_set_ghost_material()
 	_update_ghost_position()
 
@@ -66,27 +80,20 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 
-# Disattiva fisica e collisioni sulla copia fantasma.
-func _set_ghost_non_blocking() -> void:
-	var body := _ghost.get_node_or_null("StaticBody3D") as StaticBody3D
-	if body:
-		body.collision_layer = 0
-		body.collision_mask = 0
-		var shape := body.get_node_or_null("CollisionShape3D") as CollisionShape3D
-		if shape:
-			shape.disabled = true
-
-
-# Applica un materiale semitrasparente per distinguere l'anteprima.
+# Applica un materiale semitrasparente a tutte le mesh del fantasma
+# (anche quelle annidate sotto Skeleton3D, come in Strillone e Volantinatore).
 func _set_ghost_material() -> void:
-	var mesh := _ghost.get_node_or_null("MeshInstance3D") as MeshInstance3D
-	if mesh == null:
-		return
 	_ghost_material = StandardMaterial3D.new()
-	_ghost_material.albedo_color = Color(0.2, 0.9, 0.35, 0.42)
+	_ghost_material.albedo_color = COLOR_VALID
 	_ghost_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	_ghost_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	mesh.material_override = _ghost_material
+	var pending: Array[Node] = [_ghost]
+	while not pending.is_empty():
+		var current: Node = pending.pop_back()
+		if current is MeshInstance3D:
+			(current as MeshInstance3D).material_override = _ghost_material
+		for child in current.get_children():
+			pending.append(child)
 
 
 # Proietta il mouse sul piano del terreno e posiziona l'anteprima.
@@ -103,14 +110,11 @@ func _update_ghost_position() -> void:
 		_refresh_placement_validity()
 
 
-# Controlla la connettività e colora il fantasma verde o rosso.
+# Chiede al flow field se il piazzamento è valido e colora il fantasma.
 func _refresh_placement_validity() -> void:
-	_placement_is_valid = flow_field_bounds.can_place_blocks(_ghost.global_position, _yaw, _ghost, world.target, world.spawn_area_shape01)
+	_placement_is_valid = flow_field_bounds.can_place_placeable(_ghost, OBJECTS[_obj]["blocking"])
 	if _ghost_material:
-		if _placement_is_valid:
-			_ghost_material.albedo_color = Color(0.2, 0.9, 0.35, 0.42)
-		else:
-			_ghost_material.albedo_color = Color(1.0, 0.15, 0.12, 0.48)
+		_ghost_material.albedo_color = COLOR_VALID if _placement_is_valid else COLOR_INVALID
 
 
 # Ruota il fantasma a scatti di 15 gradi.
@@ -120,11 +124,13 @@ func _rotate_ghost(angle: float) -> void:
 	_update_ghost_position()
 
 
-# Crea la struttura reale e lascia al mondo il ricalcolo del flow field.
+# Crea l'elemento reale e lascia al mondo l'aggiornamento del flow field.
 func _confirm_placement() -> void:
+	# Ricontrolla al clic: il risultato è in cache, quindi non costa nulla.
+	_refresh_placement_validity()
 	if not _placement_is_valid:
 		return
-	var placement_position := _ghost.global_position + Vector3(0,0.5,0)
+	var placement_position := _ghost.global_position + Vector3(0, 0.5, 0)
 	var placement_yaw := _yaw
 	_ghost.queue_free()
 	_ghost = null
@@ -136,14 +142,17 @@ func _cancel_placement() -> void:
 	_ghost.queue_free()
 	_ghost = null
 
+
 func add_block(world_position: Vector3, yaw: float) -> Node3D:
-	var blocks : Node3D= OBJECTS[_obj]["scene"].instantiate()
-	add_child(blocks)
-	if OBJECTS[_obj]["blocking"]:
-		blocks.add_to_group("blocks")
-	blocks.global_position = world_position
-	blocks.rotation.y = yaw
-	block_added.emit()
-	#flow_field_bounds.rebuild_flow_field.call_deferred()
-	return blocks
-	
+	var blocking: bool = OBJECTS[_obj]["blocking"]
+	var placed: Node3D = OBJECTS[_obj]["scene"].instantiate()
+	placed.add_to_group("placeables")
+	add_child(placed)
+	if blocking:
+		placed.add_to_group("blocks")
+	else:
+		placed.remove_from_group("blocks")
+	placed.global_position = world_position
+	placed.rotation.y = yaw
+	block_added.emit(blocking)
+	return placed

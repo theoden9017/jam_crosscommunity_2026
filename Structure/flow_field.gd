@@ -38,10 +38,29 @@ var _shape: Shape3D
 @export_range(0.0, 1.0, 0.05) var placed_blocks_clearance: float = 0.1
 
 var grid_origin: Vector2
+var grid_world_size: Vector2
 var grid_width: float
 var grid_height: float
 var _blocked: Array[bool] = []
 var _distances: Array[float] = []
+
+# --- Piazzamento (stessa griglia fine del flow field) ---
+# 1 = cella occupata da un elemento già piazzato (bloccante o no).
+var _occupied := PackedByteArray()
+# 1 = cella di target o di spawn: non ci si può costruire sopra.
+var _reserved := PackedByteArray()
+# 1 = cella di spawn raggiungibile che deve restare collegata al target.
+var _spawn_mask := PackedByteArray()
+var _spawn_indices := PackedInt32Array()
+var _goal_indices := PackedInt32Array()
+var _spawn_areas: Array[Node3D] = []
+# Buffer riusati dal test di connettività, per non allocare a ogni movimento del mouse.
+var _test_blocked := PackedByteArray()
+var _test_visited := PackedByteArray()
+var _test_queue := PackedInt32Array()
+# Cache dell'ultimo test: si ricalcola solo se cambiano le celle del ghost o il campo.
+var _placement_cache_key := 0
+var _placement_cache_result := false
 var _field_revision := 0
 var _flow: Array[Vector2] = []
 var _escape_directions: Array[Vector2] = []
@@ -53,14 +72,6 @@ const NEIGHBORS: Array[Vector2i] = [
 	Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1),
 	Vector2i(1, 1), Vector2i(1, -1), Vector2i(-1, 1), Vector2i(-1, -1)
 ]
-
-var _ghost: Node3D
-var _yaw := 0.0
-var _ghost_material: StandardMaterial3D
-var _placement_is_valid := false
-
-var color_ghost_blue := Color(0.2, 0.9, 0.35, 0.42)
-var color_ghost_red := Color(1.0, 0.15, 0.12, 0.48)
 
 # ----------------------------------------
 # PREVIEW
@@ -160,6 +171,8 @@ func rebuild_flow_field(blocks: Array[Node3D], target: Node3D) -> void:
 	for node in blocks:
 		_mark_blocked_cells(node)
 	_calculate_distances_from_target(target)
+	_rebuild_reserved_cells()
+	refresh_occupancy()
 	_calculate_flow_vectors()
 	_calculate_escape_directions_fast()
 	_field_revision += 1
@@ -178,9 +191,16 @@ func init_grid_from_bounds(flow_debug_root: Node3D ) -> void:
 	var local_bounds := AABB(-bounds_shape.size * 0.5, bounds_shape.size)
 	var world_bounds := _transform_aabb(local_bounds, global_transform)
 	grid_origin = Vector2(world_bounds.position.x, world_bounds.position.z)
+	grid_world_size = Vector2(world_bounds.size.x, world_bounds.size.z)
 	grid_width = maxi(1, ceili(world_bounds.size.x / cell_size))
 	grid_height = maxi(1, ceili(world_bounds.size.z / cell_size))
 	_blocked.resize(grid_width * grid_height)
+	var count := int(grid_width * grid_height)
+	_occupied.resize(count)
+	_reserved.resize(count)
+	_spawn_mask.resize(count)
+	_test_blocked.resize(count)
+	_test_visited.resize(count)
 	_initialize_flow_visualization()
 	
 func cell_to_world(cell: Vector2i) -> Vector2:
@@ -190,16 +210,62 @@ func cell_to_world(cell: Vector2i) -> Vector2:
 func _index(cell: Vector2i) -> int:
 	return cell.y * grid_width + cell.x
 
+
+# Rettangolo XZ che contiene tutti i poligoni dell'ingombro.
+func _footprints_rect(footprints: Array[PackedVector2Array]) -> Rect2:
+	var rect := Rect2(footprints[0][0], Vector2.ZERO)
+	for polygon in footprints:
+		for point in polygon:
+			rect = rect.expand(point)
+	return rect
+
+
+# Celle (indici lineari) toccate dall'ingombro, con la stessa regola usata per gli ostacoli.
+# Scorre solo le celle vicine al rettangolo dell'ingombro invece di tutta la griglia.
+func _rasterize_footprints(footprints: Array[PackedVector2Array], clearance: float) -> PackedInt32Array:
+	var cells := PackedInt32Array()
+	if footprints.is_empty():
+		return cells
+	var rect := _footprints_rect(footprints)
+	var margin := cell_size * 0.5 + clearance
+	var min_cell := _clamp_cell(world_to_cell(Vector3(rect.position.x - margin, 0.0, rect.position.y - margin)))
+	var max_cell := _clamp_cell(world_to_cell(Vector3(rect.end.x + margin, 0.0, rect.end.y + margin)))
+	for z in range(min_cell.y, max_cell.y + 1):
+		for x in range(min_cell.x, max_cell.x + 1):
+			var cell := Vector2i(x, z)
+			if _cell_intersects_footprints(cell, footprints, clearance):
+				cells.append(_index(cell))
+	return cells
+
+
+# Segna come riservate le celle del target e degli spawn e raccoglie le celle di spawn
+# raggiungibili, che il test di connettività deve mantenere collegate.
+func _rebuild_reserved_cells() -> void:
+	_reserved.fill(0)
+	_spawn_mask.fill(0)
+	_spawn_indices.clear()
+	for goal in _goal_indices:
+		_reserved[goal] = 1
+	for area in _spawn_areas:
+		if not is_instance_valid(area):
+			continue
+		for cell in _get_area_cells(area):
+			var index := _index(cell)
+			_reserved[index] = 1
+			if _blocked[index] or is_inf(_distances[index]) or _spawn_mask[index] == 1:
+				continue
+			_spawn_mask[index] = 1
+			_spawn_indices.append(index)
+	_placement_cache_key = 0
+
+
 func _mark_blocked_cells(blocks: Node3D) -> void:
 	var footprints := _get_node_footprints(blocks)
 	if footprints.is_empty():
 		push_warning("Flow field: impossibile ricavare le dimensioni del blocco '%s'." % blocks.name)
 		return
-	for z in range(grid_height):
-		for x in range(grid_width):
-			var cell := Vector2i(x, z)
-			if _cell_intersects_footprints(cell, footprints, placed_blocks_clearance):
-				_blocked[_index(cell)] = true
+	for index in _rasterize_footprints(footprints, placed_blocks_clearance):
+		_blocked[index] = true
 
 
 func _get_node_footprints(node: Node3D) -> Array[PackedVector2Array]:
@@ -207,22 +273,22 @@ func _get_node_footprints(node: Node3D) -> Array[PackedVector2Array]:
 	var pending: Array[Node] = [node]
 	while not pending.is_empty():
 		var current: Node = pending.pop_back()
+		# Le Area3D figlie descrivono effetti o raggi, non l'ingombro fisico piazzato.
+		if current is Area3D:
+			continue
 		if current is CollisionShape3D:
 			var collision := current as CollisionShape3D
-			if collision.shape is BoxShape3D:
-				var box := collision.shape as BoxShape3D
-				var corners := PackedVector2Array()
-				# L'ordine deve seguire il perimetro: l'ordine annidato precedente
-				# produceva un quadrilatero a farfalla per le box ruotate.
-				for corner in [
-					Vector3(-box.size.x, 0.0, -box.size.z) * 0.5,
-					Vector3(box.size.x, 0.0, -box.size.z) * 0.5,
-					Vector3(box.size.x, 0.0, box.size.z) * 0.5,
-					Vector3(-box.size.x, 0.0, box.size.z) * 0.5
-				]:
-					var point: Vector3 = collision.global_transform * corner
-					corners.append(Vector2(point.x, point.z))
-				result.append(corners)
+			if collision.shape != null and not collision.disabled:
+				var shape_mesh := collision.shape.get_debug_mesh()
+				var points := PackedVector2Array()
+				for surface in range(shape_mesh.get_surface_count()):
+					var arrays := shape_mesh.surface_get_arrays(surface)
+					var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+					for vertex in vertices:
+						var world_vertex: Vector3 = collision.global_transform * vertex
+						points.append(Vector2(world_vertex.x, world_vertex.z))
+				if points.size() >= 3:
+					result.append(Geometry2D.convex_hull(points))
 		for child in current.get_children():
 			pending.append(child)
 	if not result.is_empty():
@@ -262,6 +328,7 @@ func _cell_intersects_footprints(cell: Vector2i, footprints: Array[PackedVector2
 				if Geometry2D.segment_intersects_segment(a, b, square[j], square[(j + 1) % 4]) != null:
 					return true
 	return false
+
 
 func _get_node_world_aabb(node: Node3D) -> AABB:
 	# Per i CSG usa il mesh effettivamente generato: l'AABB del nodo CSG può
@@ -310,41 +377,51 @@ func _transform_aabb(local_aabb: AABB, transform: Transform3D) -> AABB:
 				result = result.expand(transform * corner)
 	return result
 
-# Calcola la distanza minima di ogni cella libera dal target con Dijkstra.
-func _get_target_cells(target: Node3D) -> Array[Vector2i]:
-	var target_shapes: Array[CollisionShape3D] = []
-	var pending: Array[Node] = [target]
+# Celle il cui centro cade dentro le BoxShape3D del nodo (target o spawn).
+# Se il nodo non ha box, usa la cella della sua posizione.
+func _get_area_cells(area: Node3D) -> Array[Vector2i]:
+	var shapes: Array[CollisionShape3D] = []
+	var pending: Array[Node] = [area]
 	while not pending.is_empty():
 		var current: Node = pending.pop_back()
 		if current is CollisionShape3D:
 			var collision := current as CollisionShape3D
 			if collision.shape is BoxShape3D:
-				target_shapes.append(collision)
+				shapes.append(collision)
 		for child in current.get_children():
 			pending.append(child)
-	var goals: Array[Vector2i] = []
+	var cells: Array[Vector2i] = []
+	if shapes.is_empty():
+		cells.append(_clamp_cell(world_to_cell(area.global_position)))
+		return cells
 	for z in range(grid_height):
 		for x in range(grid_width):
 			var cell := Vector2i(x, z)
 			var center := cell_to_world(cell)
-			var is_goal := false
-			for collision in target_shapes:
+			for collision in shapes:
 				var box := collision.shape as BoxShape3D
 				var local := collision.global_transform.affine_inverse() * Vector3(center.x, collision.global_position.y, center.y)
 				if absf(local.x) <= box.size.x * 0.5 and absf(local.z) <= box.size.z * 0.5:
-					is_goal = true
+					cells.append(cell)
 					break
-			if not is_goal and target_shapes.is_empty():
-				is_goal = cell == _clamp_cell(world_to_cell(target.global_position))
-			if is_goal and not _blocked[_index(cell)]:
-				goals.append(cell)
+	return cells
+
+
+func _get_target_cells(target: Node3D) -> Array[Vector2i]:
+	var goals: Array[Vector2i] = []
+	for cell in _get_area_cells(target):
+		if not _blocked[_index(cell)]:
+			goals.append(cell)
 	return goals
 
+
+# Calcola la distanza minima di ogni cella libera dal target con Dijkstra.
 
 func _calculate_distances_from_target(target: Node3D) -> void:
 	var count := grid_width * grid_height
 	_distances.resize(count)
 	_distances.fill(INF)
+	_goal_indices.clear()
 	var goals := _get_target_cells(target)
 	if goals.is_empty():
 		# Se l'area target è coperta, prova prima la cella più vicina al centro.
@@ -370,6 +447,7 @@ func _calculate_distances_from_target(target: Node3D) -> void:
 	var frontier: Array[int] = []
 	for goal in goals:
 		var goal_index := _index(goal)
+		_goal_indices.append(goal_index)
 		_distances[goal_index] = 0.0
 		frontier.append(goal_index)
 	while not frontier.is_empty():
@@ -587,112 +665,113 @@ func _make_flow_arrow() -> Node3D:
 
 
 
-# Ricostruisce ostacoli, distanze, vettori e visualizzazione dopo una modifica.
-func can_place_blocks(world_position: Vector3, yaw: float, placement_node: Node3D, target: Node3D, spawn_area_shape: CollisionShape3D) -> bool:
-	# Simula l'ingombro della nuova barracks senza modificare la griglia corrente.
-	var test_blocked: Array[bool] = _blocked.duplicate()
-	var footprint := _get_placement_half_extents(placement_node)
-	if footprint.x <= 0.0 or footprint.y <= 0.0:
-		return false
-	var center := Vector2(world_position.x, world_position.z)
-	var axis_x := Vector2(cos(yaw), -sin(yaw))
-	var axis_z := Vector2(sin(yaw), cos(yaw))
-	var cell_projection_x := cell_size * 0.5 * (absf(axis_x.x) + absf(axis_x.y))
-	var cell_projection_z := cell_size * 0.5 * (absf(axis_z.x) + absf(axis_z.y))
-	for z in range(grid_height):
-		for x in range(grid_width):
-			var cell := Vector2i(x, z)
-			var offset := cell_to_world(cell) - center
-			if absf(offset.dot(axis_x)) <= footprint.x + blocks_clearance + cell_projection_x and absf(offset.dot(axis_z)) <= footprint.y + blocks_clearance + cell_projection_z:
-				test_blocked[_index(cell)] = true
+# ----------------------------------------
+# PIAZZAMENTO
+# ----------------------------------------
 
-	# La preview verifica la connettività da tutte le celle libere nell'area target.
-	var goals := _get_target_cells(target)
-	if goals.is_empty():
-		var goal := _clamp_cell(world_to_cell(target.global_position))
-		for radius in range(1, maxi(grid_width, grid_height)):
-			for z in range(goal.y - radius, goal.y + radius + 1):
-				for x in range(goal.x - radius, goal.x + radius + 1):
-					var candidate := Vector2i(x, z)
-					if _inside_grid(candidate) and not test_blocked[_index(candidate)]:
-						goals.append(candidate)
-				if not goals.is_empty():
-					break
-			if not goals.is_empty():
-				break
-		if goals.is_empty():
+# Registra le aree di spawn che devono restare collegate al target.
+# Va chiamata prima di rebuild_flow_field().
+func set_spawn_areas(areas: Array) -> void:
+	_spawn_areas.clear()
+	for area in areas:
+		if area is Node3D:
+			_spawn_areas.append(area)
+
+
+# Ricalcola le celle occupate dagli elementi piazzati (gruppo "placeables").
+# Basta questa, senza rebuild del flow field, dopo aver piazzato un'unità non bloccante.
+func refresh_occupancy() -> void:
+	_occupied.fill(0)
+	for placed in get_tree().get_nodes_in_group("placeables"):
+		if not is_instance_valid(placed) or not placed is Node3D:
+			continue
+		for index in _rasterize_footprints(_get_node_footprints(placed as Node3D), 0.0):
+			_occupied[index] = 1
+	_placement_cache_key = 0
+
+
+# Valida l'anteprima. Regole:
+# 1. l'ingombro deve stare tutto dentro il flow field;
+# 2. le celle toccate devono essere libere, raggiungibili, non occupate e non di spawn/target;
+# 3. se l'elemento è bloccante, dopo il piazzamento ogni cella di spawn deve ancora
+#    raggiungere il target (simulato con la stessa rasterizzazione del rebuild).
+func can_place_placeable(placement_node: Node3D, blocking: bool) -> bool:
+	if _distances.is_empty() or _occupied.is_empty():
+		return false
+	var footprints := _get_node_footprints(placement_node)
+	if footprints.is_empty():
+		return false
+
+	var rect := _footprints_rect(footprints)
+	if rect.position.x < grid_origin.x or rect.position.y < grid_origin.y \
+	or rect.end.x > grid_origin.x + grid_world_size.x \
+	or rect.end.y > grid_origin.y + grid_world_size.y:
+		return false
+
+	var body_cells := _rasterize_footprints(footprints, 0.0)
+	if body_cells.is_empty():
+		return false
+	for index in body_cells:
+		if _blocked[index] or is_inf(_distances[index]) or _reserved[index] == 1 or _occupied[index] == 1:
 			return false
 
-	# Esegue una BFS multi-sorgente dal target per marcare le celle raggiungibili.
-	var reachable := PackedByteArray()
-	reachable.resize(grid_width * grid_height)
-	var queue: Array[Vector2i] = []
-	for goal in goals:
-		if test_blocked[_index(goal)]:
-			continue
-		reachable[_index(goal)] = 1
-		queue.append(goal)
-	var queue_cursor := 0
-	while queue_cursor < queue.size():
-		var current := queue[queue_cursor]
-		queue_cursor += 1
-		for neighbor_offset in NEIGHBORS:
-			var next := current + neighbor_offset
-			if not _inside_grid(next) or test_blocked[_index(next)] or reachable[_index(next)] == 1:
+	if not blocking:
+		return true
+
+	var block_cells := _rasterize_footprints(footprints, placed_blocks_clearance)
+	var key := hash([block_cells, _field_revision])
+	if key == _placement_cache_key:
+		return _placement_cache_result
+	_placement_cache_result = _keeps_spawns_connected(block_cells)
+	_placement_cache_key = key
+	return _placement_cache_result
+
+
+# BFS dal target con le celle del nuovo blocco considerate chiuse.
+# Usa gli stessi vicini e la stessa regola sulle diagonali del calcolo distanze.
+func _keeps_spawns_connected(block_cells: PackedInt32Array) -> bool:
+	if _spawn_indices.is_empty():
+		return true
+	_test_blocked.fill(0)
+	for index in block_cells:
+		_test_blocked[index] = 1
+	# Un blocco che copre una cella di spawn la renderebbe irraggiungibile.
+	for index in _spawn_indices:
+		if _test_blocked[index] == 1:
+			return false
+
+	_test_visited.fill(0)
+	_test_queue.clear()
+	for goal in _goal_indices:
+		if not _is_test_blocked(goal):
+			_test_visited[goal] = 1
+			_test_queue.append(goal)
+
+	var remaining := _spawn_indices.size()
+	var head := 0
+	while head < _test_queue.size():
+		var current_index := _test_queue[head]
+		head += 1
+		if _spawn_mask[current_index] == 1:
+			remaining -= 1
+			if remaining == 0:
+				return true
+		var current := _cell_from_index(current_index)
+		for offset in NEIGHBORS:
+			var next := current + offset
+			if not _inside_grid(next):
 				continue
-			if neighbor_offset.x != 0 and neighbor_offset.y != 0:
-				if test_blocked[_index(current + Vector2i(neighbor_offset.x, 0))] or test_blocked[_index(current + Vector2i(0, neighbor_offset.y))]:
+			var next_index := _index(next)
+			if _test_visited[next_index] == 1 or _is_test_blocked(next_index):
+				continue
+			if offset.x != 0 and offset.y != 0:
+				if _is_test_blocked(_index(current + Vector2i(offset.x, 0))) \
+				or _is_test_blocked(_index(current + Vector2i(0, offset.y))):
 					continue
-			reachable[_index(next)] = 1
-			queue.append(next)
-
-	# Rifiuta il piazzamento se anche una cella di spawn rimane bloccata o isolata.
-	var spawn_box := spawn_area_shape.shape as BoxShape3D
-	if spawn_box == null:
-		return false
-	var inverse_spawn_transform := spawn_area_shape.global_transform.affine_inverse()
-	var spawn_half_size := spawn_box.size * 0.5
-	var found_spawn_cell := false
-	for z in range(grid_height):
-		for x in range(grid_width):
-			var cell := Vector2i(x, z)
-			var cell_world := Vector3(cell_to_world(cell).x, 0.0, cell_to_world(cell).y)
-			var spawn_local := inverse_spawn_transform * cell_world
-			if absf(spawn_local.x) > spawn_half_size.x or absf(spawn_local.y) > spawn_half_size.y or absf(spawn_local.z) > spawn_half_size.z:
-				continue
-			found_spawn_cell = true
-			var spawn_index := _index(cell)
-			if test_blocked[spawn_index] or reachable[spawn_index] == 0:
-				return false
-	return found_spawn_cell
+			_test_visited[next_index] = 1
+			_test_queue.append(next_index)
+	return false
 
 
-# Ricava l'impronta X/Z dalle collisioni direttamente sotto il nodo da piazzare.
-# Ignora le Area3D figlie (per esempio il raggio d'attacco della torre).
-func _get_placement_half_extents(placement_node: Node3D) -> Vector2:
-	var footprint := AABB()
-	var found_shape := false
-	for child in placement_node.get_children():
-		if child is not CollisionShape3D:
-			continue
-		var collision := child as CollisionShape3D
-		if collision.shape == null:
-			continue
-		var local_shape_aabb := collision.shape.get_debug_mesh().get_aabb()
-		var shape_aabb := _transform_aabb(local_shape_aabb, collision.transform)
-		footprint = shape_aabb if not found_shape else footprint.merge(shape_aabb)
-		found_shape = true
-	if not found_shape:
-		return Vector2.ZERO
-	var half_x := maxf(absf(footprint.position.x), absf(footprint.end.x))
-	var half_z := maxf(absf(footprint.position.z), absf(footprint.end.z))
-	return Vector2(half_x, half_z)
-	
-# Controlla la connettività e colora il fantasma verde o rosso.
-func _refresh_placement_validity(target: Node3D, spawn_area_shape: CollisionShape3D) -> void:
-	_placement_is_valid = can_place_blocks(_ghost.global_position, _yaw, _ghost, target, spawn_area_shape)
-	if _ghost_material:
-		if _placement_is_valid:
-			_ghost_material.albedo_color = color_ghost_blue
-		else:
-			_ghost_material.albedo_color = color_ghost_red
+func _is_test_blocked(index: int) -> bool:
+	return _blocked[index] or _test_blocked[index] == 1

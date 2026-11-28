@@ -29,6 +29,8 @@ func _ready() -> void:
 	_flow_debug_root.name = "FlowFieldDebug"
 	add_child(_flow_debug_root)
 	flow_field_bounds.init_grid_from_bounds(_flow_debug_root)
+	# Spawn che devono restare collegati al target. Per il multi-spawn basterà aggiungere spawn_02.
+	flow_field_bounds.set_spawn_areas([spawn_01])
 	flow_field_bounds.rebuild_flow_field(update_field(), target)
 	match_controller_target = target
 
@@ -61,20 +63,27 @@ func _collect_blocks(parent: Node, blocks: Array[Node3D]) -> void:
 			blocks.append(node as Node3D)
 		_collect_blocks(node, blocks)
 
-func _on_flow_field_bounds_field_reviewed() -> void:
-	pass
+	
+func _on_block_placing_block_added(blocking: bool) -> void:
+	if blocking:
+		# Un ostacolo cambia i percorsi: ricostruisce tutto (occupazione compresa).
+		flow_field_bounds.rebuild_flow_field(update_field(), target)
+	else:
+		# Un'unità non bloccante occupa solo celle: basta aggiornare l'occupazione.
+		flow_field_bounds.refresh_occupancy()
 
 
 
 
 
+func _on_hud_stricioni_selected() -> void:
+	block_placing.begin_placement("STRISCIONE")
 
-func _on_hud_block_selected() -> void:
-	block_placing.begin_placement("BLOCK")
+func _on_hud_strillone_selected() -> void:
+	block_placing.begin_placement("STRILLONE")
 
-func _on_hud_tower_selected() -> void:
-	block_placing.begin_placement("TOWER")
+func _on_hud_volantinatore_selected() -> void:
+	block_placing.begin_placement("VOLANTINATORE")
 
-
-func _on_block_placing_block_added() -> void:
-	flow_field_bounds.rebuild_flow_field(update_field(), target)
+func _on_hud_gazebo_selected() -> void:
+	block_placing.begin_placement("GAZEBO")

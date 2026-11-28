@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://b53ad0csyeqlu"]
 
+[ext_resource type="PackedScene" uid="uid://cxxiyynu683da" path="res://Assets/Mesh/Torrette/Striscione.fbx" id="1_lmuyu"]
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_im0tn"]
 albedo_color = Color(2.815649e-06, 0.46330518, 0.25399244, 1)
 
@@ -10,11 +12,15 @@ size = Vector3(4.0915527, 1, 1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_xfwl5"]
 size = Vector3(3.9974976, 1, 1)
 
-[node name="block" type="Node3D" unique_id=437267418 groups=["blocks"]]
+[node name="striscione" type="Node3D" unique_id=437267418 groups=["blocks"]]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1045992139]
+visible = false
 mesh = SubResource("BoxMesh_qncar")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=805268489]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.021331787, 0, 0)
 shape = SubResource("BoxShape3D_xfwl5")
+
+[node name="Striscione" parent="." unique_id=1069635664 instance=ExtResource("1_lmuyu")]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, -0.021331787, -0.48653036, 0)
