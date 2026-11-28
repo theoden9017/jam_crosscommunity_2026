@@ -2,6 +2,8 @@ extends Node
 
 # blocking = true se l'elemento piazzato modifica il flow field.
 signal block_added(blocking: bool)
+# Cambia il numero di elementi piazzati: l'HUD aggiorna i pulsanti.
+signal inventory_changed
 # Gestisce anteprima e conferma del piazzamento degli elementi.
 
 @onready var world: Node3D = get_parent()
@@ -16,34 +18,76 @@ var _obj: String
 var _yaw := 0.0
 var _ghost_material: StandardMaterial3D
 var _placement_is_valid := false
+# Quanti elementi di ogni tipo sono stati piazzati (chiave = nome in OBJECTS).
+var _placed_count := {}
 
 
 const OBJECTS = {
 	"STRILLONE": {
+		"label": "Strillone",
 		"scene": preload("res://placeable/strillone.tscn"),
 		"ghostname": "StrilGhost",
-		"blocking": false
+		"blocking": false,
+		# Costo in quote sindacali e numero massimo piazzabile nel livello.
+		"cost": 40,
+		"max": 6
 	},
 	"VOLANTINATORE": {
+		"label": "Volantinatore",
 		"scene": preload("res://placeable/volantinatore.tscn"),
 		"ghostname": "VolantGhost",
-		"blocking": false
+		"blocking": false,
+		"cost": 60,
+		"max": 4
 	},
 	"STRISCIONE": {
+		"label": "Striscione",
 		"scene": preload("res://placeable/stricione.tscn"),
 		"ghostname": "StriscGhost",
-		"blocking": true
+		"blocking": true,
+		"cost": 25,
+		"max": 10
 	},
 	"GAZEBO": {
+		"label": "Gazebo",
 		"scene": preload("res://placeable/gazebo.tscn"),
 		"ghostname": "GazebGhost",
-		"blocking": true
+		"blocking": true,
+		"cost": 80,
+		"max": 2
 	}
 }
 
 
+# ----------------------------------------
+# COSTI E LIMITI
+# ----------------------------------------
+
+func get_cost(obj: String) -> int:
+	return OBJECTS[obj]["cost"]
+
+
+func get_max_count(obj: String) -> int:
+	return OBJECTS[obj]["max"]
+
+
+func get_placed_count(obj: String) -> int:
+	return _placed_count.get(obj, 0)
+
+
+func get_remaining(obj: String) -> int:
+	return maxi(0, get_max_count(obj) - get_placed_count(obj))
+
+
+## Vero se ci sono fondi e unità disponibili per iniziare a piazzare questo elemento.
+func can_start_placement(obj: String) -> bool:
+	return get_remaining(obj) > 0 and GameController.can_afford(get_cost(obj))
+
+
 # Attiva la modalità costruzione e crea una copia trasparente dell'elemento.
 func begin_placement(obj: String) -> void:
+	if not OBJECTS.has(obj) or not can_start_placement(obj):
+		return
 	if is_instance_valid(_ghost):
 		_ghost.queue_free()
 	_obj = obj
@@ -112,7 +156,8 @@ func _update_ghost_position() -> void:
 
 # Chiede al flow field se il piazzamento è valido e colora il fantasma.
 func _refresh_placement_validity() -> void:
-	_placement_is_valid = flow_field_bounds.can_place_placeable(_ghost, OBJECTS[_obj]["blocking"])
+	_placement_is_valid = can_start_placement(_obj) \
+		and flow_field_bounds.can_place_placeable(_ghost, OBJECTS[_obj]["blocking"])
 	if _ghost_material:
 		_ghost_material.albedo_color = COLOR_VALID if _placement_is_valid else COLOR_INVALID
 
@@ -129,6 +174,9 @@ func _confirm_placement() -> void:
 	# Ricontrolla al clic: il risultato è in cache, quindi non costa nulla.
 	_refresh_placement_validity()
 	if not _placement_is_valid:
+		return
+	# I fondi si scalano solo alla conferma, non alla selezione.
+	if not GameController.spend_union_funds(get_cost(_obj)):
 		return
 	var placement_position := _ghost.global_position + Vector3(0, 0.5, 0)
 	var placement_yaw := _yaw
@@ -154,5 +202,16 @@ func add_block(world_position: Vector3, yaw: float) -> Node3D:
 		placed.remove_from_group("blocks")
 	placed.global_position = world_position
 	placed.rotation.y = yaw
+	_placed_count[_obj] = get_placed_count(_obj) + 1
+	# Se l'elemento viene rimosso, la sua unità torna disponibile.
+	placed.tree_exited.connect(_on_placed_removed.bind(_obj))
 	block_added.emit(blocking)
+	inventory_changed.emit()
 	return placed
+
+
+func _on_placed_removed(obj: String) -> void:
+	if not is_inside_tree():
+		return
+	_placed_count[obj] = maxi(0, get_placed_count(obj) - 1)
+	inventory_changed.emit()

@@ -1,0 +1,8 @@
+Godot Engine Logo
+Copyright (c) 2017 Andrea Calabró
+
+This work is licensed under the Creative Commons Attribution 4.0 International
+license (CC BY 4.0 International): https://creativecommons.org/licenses/by/4.0/
+
+Fonte: https://github.com/godotengine/godot/tree/master/misc/logo (logo_outlined.svg)
+Per la licenza CC BY va citato l'autore, ad esempio nei crediti del gioco.

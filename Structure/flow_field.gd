@@ -61,6 +61,10 @@ var _test_queue := PackedInt32Array()
 # Cache dell'ultimo test: si ricalcola solo se cambiano le celle del ghost o il campo.
 var _placement_cache_key := 0
 var _placement_cache_result := false
+# Poligoni XZ delle aree non edificabili (gruppo "unbuildable").
+# Bloccano solo il piazzamento: non entrano mai in _blocked, quindi il flow field non cambia.
+var _unbuildable_footprints: Array[PackedVector2Array] = []
+var _unbuildable_rects: Array[Rect2] = []
 var _field_revision := 0
 var _flow: Array[Vector2] = []
 var _escape_directions: Array[Vector2] = []
@@ -172,6 +176,7 @@ func rebuild_flow_field(blocks: Array[Node3D], target: Node3D) -> void:
 		_mark_blocked_cells(node)
 	_calculate_distances_from_target(target)
 	_rebuild_reserved_cells()
+	_collect_unbuildable_areas()
 	refresh_occupancy()
 	_calculate_flow_vectors()
 	_calculate_escape_directions_fast()
@@ -268,13 +273,13 @@ func _mark_blocked_cells(blocks: Node3D) -> void:
 		_blocked[index] = true
 
 
-func _get_node_footprints(node: Node3D) -> Array[PackedVector2Array]:
+func _get_node_footprints(node: Node3D, skip_areas := true) -> Array[PackedVector2Array]:
 	var result: Array[PackedVector2Array] = []
 	var pending: Array[Node] = [node]
 	while not pending.is_empty():
 		var current: Node = pending.pop_back()
 		# Le Area3D figlie descrivono effetti o raggi, non l'ingombro fisico piazzato.
-		if current is Area3D:
+		if skip_areas and current is Area3D:
 			continue
 		if current is CollisionShape3D:
 			var collision := current as CollisionShape3D
@@ -708,6 +713,9 @@ func can_place_placeable(placement_node: Node3D, blocking: bool) -> bool:
 	or rect.end.y > grid_origin.y + grid_world_size.y:
 		return false
 
+	if _overlaps_unbuildable(footprints, rect):
+		return false
+
 	var body_cells := _rasterize_footprints(footprints, 0.0)
 	if body_cells.is_empty():
 		return false
@@ -725,6 +733,33 @@ func can_place_placeable(placement_node: Node3D, blocking: bool) -> bool:
 	_placement_cache_result = _keeps_spawns_connected(block_cells)
 	_placement_cache_key = key
 	return _placement_cache_result
+
+
+# Raccoglie le CollisionShape3D nel gruppo "unbuildable" (o figlie di un nodo del gruppo).
+# Qui le Area3D non vengono saltate: un'area non edificabile può essere anche un Area3D.
+func _collect_unbuildable_areas() -> void:
+	_unbuildable_footprints.clear()
+	_unbuildable_rects.clear()
+	for node in get_tree().get_nodes_in_group("unbuildable"):
+		if not is_instance_valid(node) or not node is Node3D:
+			continue
+		for polygon in _get_node_footprints(node as Node3D, false):
+			_unbuildable_footprints.append(polygon)
+			var single: Array[PackedVector2Array] = [polygon]
+			_unbuildable_rects.append(_footprints_rect(single))
+	_placement_cache_key = 0
+
+
+# Test geometrico esatto (non a celle): basta che l'ingombro tocchi un'area per rifiutarlo.
+func _overlaps_unbuildable(footprints: Array[PackedVector2Array], rect: Rect2) -> bool:
+	for i in range(_unbuildable_footprints.size()):
+		if not rect.intersects(_unbuildable_rects[i], true):
+			continue
+		var area := _unbuildable_footprints[i]
+		for polygon in footprints:
+			if not Geometry2D.intersect_polygons(polygon, area).is_empty():
+				return true
+	return false
 
 
 # BFS dal target con le celle del nuovo blocco considerate chiuse.

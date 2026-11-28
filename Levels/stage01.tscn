@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://cac74e3gff1ci" path="res://Assets/Mesh/Edifici/Rimorchio.blend" id="12_pe4bh"]
 [ext_resource type="PackedScene" uid="uid://c6mmujur8dbt3" path="res://Assets/Mesh/Edifici/TostopanSRL.blend" id="13_h6v5h"]
 [ext_resource type="Texture2D" uid="uid://djgbxf6awj8q0" path="res://Assets/Mesh/Edifici/textures/TrimGroundPixel.png" id="15_14540"]
+[ext_resource type="PackedScene" path="res://Menu/pause_menu.tscn" id="99_pause"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_7bpeb"]
 size = Vector3(2.40918, 1, 9.602078)
@@ -92,9 +93,11 @@ material = SubResource("StandardMaterial3D_14540")
 size = Vector2(10, 10)
 orientation = 1
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_npkn0"]
+size = Vector3(4.078125, 7.519043, 5.1655273)
+
 [node name="Stage01" type="Node3D" unique_id=2029331640]
 script = ExtResource("1_7bpeb")
-spawn_interval = 5.0
 
 [node name="MatchController" type="Node" parent="." unique_id=1842204424 node_paths=PackedStringArray("target", "flowfield")]
 script = ExtResource("4_e1rv4")
@@ -265,6 +268,7 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 25.3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.014887, 0, -5.739765)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ground" unique_id=242002194]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04498291, 0, 0.02722168)
 mesh = SubResource("QuadMesh_oaf1g")
 skeleton = NodePath("../..")
 
@@ -402,6 +406,15 @@ skeleton = NodePath("../..")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 20.04561)
 mesh = SubResource("QuadMesh_oaf1g")
 skeleton = NodePath("../..")
+
+[node name="PauseMenu" parent="." unique_id=1693022817 instance=ExtResource("99_pause")]
+
+[node name="UnBuildableAreas" type="Node3D" parent="." unique_id=987926243]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="UnBuildableAreas" unique_id=1539232877 groups=["unbuildable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.111847, -0.9938965, -2.5925293)
+shape = SubResource("BoxShape3D_npkn0")
+debug_color = Color(0.99008757, 0, 0.28825969, 0.41960785)
 
 [connection signal="block_added" from="BlockPlacing" to="." method="_on_block_placing_block_added"]
 [connection signal="gazebo_selected" from="HUD" to="." method="_on_hud_gazebo_selected"]

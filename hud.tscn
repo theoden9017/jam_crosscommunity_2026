@@ -49,8 +49,28 @@ theme_override_font_sizes/font_size = 21
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Label4" type="Label" parent="TopPanel/HBoxContainer" unique_id=1587330241]
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+text = "        Casse sindacali :         "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="unionFunds" type="Label" parent="TopPanel/HBoxContainer" unique_id=1587330242]
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="waveInfo" type="Label" parent="TopPanel/HBoxContainer" unique_id=1587330243]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Label3" type="Label" parent="TopPanel/HBoxContainer" unique_id=1232479667]
-custom_minimum_size = Vector2(836.06, 0)
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 21
 horizontal_alignment = 1

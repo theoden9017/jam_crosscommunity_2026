@@ -11,6 +11,12 @@ var actual_level = 1
 var StrikeDays = 1
 var CurrentWorkers = 0
 
+# Casse sindacali: si riempiono con le quote dei lavoratori convinti
+# e si svuotano costruendo strutture.
+signal union_funds_changed(new_amount: int)
+const STARTING_UNION_FUNDS := 100
+var UnionFunds: int = STARTING_UNION_FUNDS
+
 var _settings: Dictionary
 var _awaiting_action := StringName()
 var _defaults := {
@@ -21,6 +27,29 @@ var _inGame: Dictionary
 var _defaults_inGame := {
 	"actual_level": 1, "strike_days": 1
 }
+
+
+# Da chiamare all'inizio di ogni livello.
+func reset_union_funds() -> void:
+	UnionFunds = STARTING_UNION_FUNDS
+	union_funds_changed.emit(UnionFunds)
+
+func add_union_funds(amount: int) -> void:
+	if amount <= 0:
+		return
+	UnionFunds += amount
+	union_funds_changed.emit(UnionFunds)
+
+func can_afford(cost: int) -> bool:
+	return UnionFunds >= cost
+
+# Restituisce false (e non scala nulla) se i fondi non bastano.
+func spend_union_funds(cost: int) -> bool:
+	if not can_afford(cost):
+		return false
+	UnionFunds -= cost
+	union_funds_changed.emit(UnionFunds)
+	return true
 
 
 static func load_settings(defaults: Dictionary) -> Dictionary:

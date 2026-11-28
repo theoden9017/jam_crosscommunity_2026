@@ -4,6 +4,11 @@ extends Control
 
 var livello := "res://Levels/stage01.tscn"
 var settings := preload("res://Menu/settings.tscn")
+var credits := preload("res://Menu/credits.tscn")
+var quit_confirm := preload("res://Menu/quit_confirm.tscn")
+
+# Finestra di crediti o conferma uscita aperta (una alla volta).
+var _dialog: Node
 
 
 # Called when the node enters the scene tree for the first time.
@@ -21,7 +26,7 @@ func _process(delta: float) -> void:
 
 
 func _on_new_game_btm_pressed() -> void:
-	get_tree().change_scene_to_file(livello)
+	SceneTransition.change_scene(livello)
 
 
 func _on_settings_btm_pressed() -> void:
@@ -29,7 +34,17 @@ func _on_settings_btm_pressed() -> void:
 	add_child(settings_instance)
 
 
+# Chiede conferma: il salvataggio e l'uscita li gestisce quit_confirm.gd.
 func _on_end_btm_pressed() -> void:
-	GameController._inGame["actual_level"]=  GameController.actual_level
-	GameController.save_inGame(GameController._inGame)
-	get_tree().quit()
+	_open_dialog(quit_confirm)
+
+
+func _on_credits_btm_pressed() -> void:
+	_open_dialog(credits)
+
+
+func _open_dialog(scene: PackedScene) -> void:
+	if is_instance_valid(_dialog):
+		return
+	_dialog = scene.instantiate()
+	add_child(_dialog)

@@ -3,7 +3,6 @@ extends Node3D
 
 
 @export_range(1, 5, 1) var _level:int
-@export var spawn_interval: float = 1.0
 @onready var match_controller: Node = $MatchController
 @onready var match_controller_target: Node3D = $Target
 @onready var grey_box: Node3D = $GreyBox
@@ -16,14 +15,15 @@ extends Node3D
 @onready var spawn_01: Node3D = $Spawn01
 @onready var spawn_02: Node3D = $Spawn02
 
-var _spawn_timer := 0.0
 var _flow_debug_root: Node3D
 var _blocks_count := 0
 @onready var block_placing: Node = $BlockPlacing
+@onready var hud: Control = $HUD
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	_level = GameController.actual_level 
+	GameController.reset_union_funds()
 	level_setup(_level)
 	_flow_debug_root = Node3D.new()
 	_flow_debug_root.name = "FlowFieldDebug"
@@ -33,14 +33,15 @@ func _ready() -> void:
 	flow_field_bounds.set_spawn_areas([spawn_01])
 	flow_field_bounds.rebuild_flow_field(update_field(), target)
 	match_controller_target = target
+	hud.bind_block_placing(block_placing)
+	hud.bind_match_controller(match_controller)
+	# Le ondate, le pause e gli intervalli sono definiti nella WaveTable del MatchController.
+	match_controller.start_waves(spawn_01)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	#fps_label.text = "FPS: %d" % Engine.get_frames_per_second()
-	_spawn_timer += delta
-	if _spawn_timer >= spawn_interval:
-		_spawn_timer = 0.0
-		match_controller.spawn_enemy_wave(spawn_01)
+	pass
 
 
 func level_setup(level: int):

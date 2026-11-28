@@ -1,0 +1,90 @@
+[gd_scene format=3 uid="uid://bh0qtw081xau1"]
+
+[ext_resource type="Script" uid="uid://dwo3ovkyli1vm" path="res://Menu/credits.gd" id="1_credits"]
+
+[node name="Credits" type="Control" unique_id=1188026490]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_credits")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=731925974]
+layout_mode = 0
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 1950.0
+offset_bottom = 1100.0
+color = Color(0, 0, 0, 0.78431374)
+
+[node name="Panel" type="Panel" parent="." unique_id=921513560]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -440.0
+offset_right = 300.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="Panel" unique_id=478456736]
+layout_mode = 0
+offset_left = 50.0
+offset_top = 25.0
+offset_right = 550.0
+offset_bottom = 65.0
+theme_override_font_sizes/font_size = 28
+text = "Crediti"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="Panel" unique_id=688466894]
+layout_mode = 0
+offset_left = 50.0
+offset_top = 80.0
+offset_right = 550.0
+offset_bottom = 600.0
+horizontal_scroll_mode = 0
+
+[node name="Text" type="RichTextLabel" parent="Panel/Scroll" unique_id=1256114496]
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+text = "[center]La Direzione precisa e dispone che tutti i crediti lavorativi eventualmente maturati dal personale nel corso della Jam siano da intendersi, a ogni effetto e titolo, quali benefit aziendali concessi a carattere esclusivamente premiale e non retributivo.
+
+Pertanto, la loro maturazione e il successivo utilizzo non costituiscono, in alcun caso, presupposto per la rivendicazione di corrispettivi economici, indennità, compensazioni monetarie o qualsivoglia altra forma di remunerazione in denaro.
+
+La Direzione ringrazia per la collaborazione e invita il personale a considerare tale disposizione definitiva, inappellabile e, soprattutto, non monetizzabile.
+
+
+[b]
+Modellatore - Jena
+Map & Sounds Designer - Luca
+Programmer - Theoblend
+
+
+"
+fit_content = true
+
+[node name="Close" type="Button" parent="Panel" unique_id=331546617]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -50.0
+offset_top = -90.0
+offset_right = 50.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Chiudi"
+
+[connection signal="pressed" from="Panel/Close" to="." method="_on_close_pressed"]
