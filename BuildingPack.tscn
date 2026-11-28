@@ -8,29 +8,77 @@
 [ext_resource type="PackedScene" uid="uid://b2po2vbggdmkc" path="res://Assets/Mesh/Edifici/OrsolicchiShop.blend" id="6_1flx8"]
 [ext_resource type="PackedScene" uid="uid://cac74e3gff1ci" path="res://Assets/Mesh/Edifici/Rimorchio.blend" id="7_ugh04"]
 [ext_resource type="PackedScene" uid="uid://c6mmujur8dbt3" path="res://Assets/Mesh/Edifici/TostopanSRL.blend" id="8_d4qkx"]
+[ext_resource type="PackedScene" uid="uid://csb8momw34cr2" path="res://Assets/Mesh/Edifici/CancelloCarraio.fbx" id="9_87dcd"]
+[ext_resource type="PackedScene" uid="uid://dloyxd6c4mi60" path="res://Assets/Mesh/Edifici/Cassonetto.fbx" id="10_br6o2"]
+[ext_resource type="PackedScene" uid="uid://0ilpkcswnpxr" path="res://Assets/Mesh/Edifici/Container01.fbx" id="11_460eu"]
+[ext_resource type="PackedScene" uid="uid://dhayleyfocuir" path="res://Assets/Mesh/Edifici/Container.fbx" id="12_e775k"]
+[ext_resource type="PackedScene" uid="uid://qcv8o4iv47ut" path="res://Assets/Mesh/Edifici/PilastriCancello.fbx" id="13_5ipmv"]
+[ext_resource type="PackedScene" uid="uid://drw4mpkimsae3" path="res://Assets/Mesh/Edifici/Ringhiera2M.fbx" id="14_b7h3h"]
+[ext_resource type="PackedScene" uid="uid://bexwsvl45s08" path="res://Assets/Mesh/Edifici/sezioneringhiera.fbx" id="15_rc8fu"]
+[ext_resource type="PackedScene" uid="uid://c5aatmindlbsa" path="res://Assets/Mesh/Edifici/Transenna.fbx" id="16_ajdxq"]
+[ext_resource type="PackedScene" uid="uid://ud66iggs1go0" path="res://Assets/Mesh/Edifici/Ufficio01.fbx" id="17_veot2"]
+[ext_resource type="PackedScene" uid="uid://d3cvf7wfwgq08" path="res://Assets/Mesh/Edifici/Ufficio02.fbx" id="18_67en6"]
+[ext_resource type="PackedScene" uid="uid://c7jhtmyewv7tu" path="res://Assets/Mesh/Edifici/Ufficio03.fbx" id="19_7ifc7"]
+[ext_resource type="PackedScene" uid="uid://b0wkpy1sqp4sv" path="res://Assets/Mesh/Edifici/Ufficio04.fbx" id="20_kd27o"]
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" unique_id=298685895]
 
-[node name="Capannoni" parent="." instance=ExtResource("1_pu7gi")]
+[node name="Capannoni" parent="." unique_id=268763485 instance=ExtResource("1_pu7gi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.4075, 0, -4.48462)
 
-[node name="Fabbrica001" parent="." instance=ExtResource("2_2lwtv")]
+[node name="Fabbrica001" parent="." unique_id=956927750 instance=ExtResource("2_2lwtv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.52807, 0, 0.912573)
 
-[node name="Fabbrica" parent="." instance=ExtResource("3_j16qr")]
+[node name="Fabbrica" parent="." unique_id=1443868440 instance=ExtResource("3_j16qr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.2742, 0, -0.397938)
 
-[node name="Magazzino" parent="." instance=ExtResource("4_iduvr")]
+[node name="Magazzino" parent="." unique_id=1621421884 instance=ExtResource("4_iduvr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.7959, 0, 0.793253)
 
-[node name="Orsolicchi" parent="." instance=ExtResource("5_yb6ns")]
+[node name="Orsolicchi" parent="." unique_id=826473999 instance=ExtResource("5_yb6ns")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53.6541, 0, 1.43295)
 
-[node name="OrsolicchiShop" parent="." instance=ExtResource("6_1flx8")]
+[node name="OrsolicchiShop" parent="." unique_id=1583190510 instance=ExtResource("6_1flx8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 74.1688, 0, 1.0815)
 
-[node name="Rimorchio" parent="." instance=ExtResource("7_ugh04")]
+[node name="Rimorchio" parent="." unique_id=859039843 instance=ExtResource("7_ugh04")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.4012, 0, 14.8468)
 
-[node name="TostopanSRL" parent="." instance=ExtResource("8_d4qkx")]
+[node name="TostopanSRL" parent="." unique_id=394497107 instance=ExtResource("8_d4qkx")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 98.5648, 0, -2.57474)
+
+[node name="CancelloCarraio" parent="." unique_id=1232158908 instance=ExtResource("9_87dcd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.587673, 0, 15.018162)
+
+[node name="Cassonetto" parent="." unique_id=1908010809 instance=ExtResource("10_br6o2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.450861, 0, 19.21563)
+
+[node name="Container01" parent="." unique_id=1463823064 instance=ExtResource("11_460eu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38.370117, 0, 14.663473)
+
+[node name="Container" parent="." unique_id=910857523 instance=ExtResource("12_e775k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37.696182, 0, 20.466415)
+
+[node name="PilastriCancello" parent="." unique_id=1006402193 instance=ExtResource("13_5ipmv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.585772, 0, 14.774565)
+
+[node name="Ringhiera2M" parent="." unique_id=1482159369 instance=ExtResource("14_b7h3h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.629793, 0, 15.453085)
+
+[node name="sezioneringhiera" parent="." unique_id=998102433 instance=ExtResource("15_rc8fu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.766592, 0, 15.966198)
+
+[node name="Transenna" parent="." unique_id=1945461619 instance=ExtResource("16_ajdxq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.141691, 0, 19.196732)
+
+[node name="Ufficio01" parent="." unique_id=475119355 instance=ExtResource("17_veot2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.07864, 0, -21.758303)
+
+[node name="Ufficio02" parent="." unique_id=275078936 instance=ExtResource("18_67en6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.57040596, 0, -27.791126)
+
+[node name="Ufficio03" parent="." unique_id=181953166 instance=ExtResource("19_7ifc7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.003887, 0, -23.98428)
+
+[node name="Ufficio04" parent="." unique_id=818760354 instance=ExtResource("20_kd27o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.46765, 0, -46.2127)
