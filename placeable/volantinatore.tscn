@@ -1,7 +1,7 @@
-[gd_scene format=4 uid="uid://b185mgvhptb3o"]
+[gd_scene format=4 uid="uid://bswqatxeqxmot"]
 
-[ext_resource type="Texture2D" uid="uid://dfbrfu7jnx6w2" path="res://Assets/Mesh/Textures/TrimCharacter.png" id="1_k1sas"]
-[ext_resource type="Script" uid="uid://g780jv4543lj" path="res://tower.gd" id="1_tower_script"]
+[ext_resource type="Script" uid="uid://dp2yronky8p14" path="res://placeable/volantinatore.gd" id="1_0pbwx"]
+[ext_resource type="Texture2D" uid="uid://dfbrfu7jnx6w2" path="res://Assets/Mesh/Textures/TrimCharacter.png" id="2_hu0bt"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_dnc73"]
 height = 0.8144531
@@ -14,7 +14,7 @@ radius = 4.3706055
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_obwo7"]
 resource_name = "Material"
 vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("1_k1sas")
+albedo_texture = ExtResource("2_hu0bt")
 emission_enabled = true
 emission = Color(1, 1, 1, 1)
 emission_energy_multiplier = 0.0
@@ -340,9 +340,9 @@ _data = {
 &"mixamo_com": SubResource("Animation_b7fjh")
 }
 
-[node name="tower" type="Node3D" unique_id=437267418]
-script = ExtResource("1_tower_script")
-damage_per_second = 15.0
+[node name="volantinatore" type="Node3D" unique_id=437267418]
+script = ExtResource("1_0pbwx")
+damage_per_second = 5.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=805268489]
 shape = SubResource("CylinderShape3D_dnc73")
@@ -588,7 +588,10 @@ bones/32/rotation = Quaternion(5.030698e-17, 2.1684043e-18, -2.7755576e-17, 1)
 bones/32/scale = Vector3(1, 1, 1)
 
 [node name="Cube_008" type="MeshInstance3D" parent="Skeleton3D" unique_id=1056999289]
-transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
+mesh = SubResource("ArrayMesh_dnc73")
+skin = SubResource("Skin_k1sas")
+
+[node name="Cube_009" type="MeshInstance3D" parent="Skeleton3D" unique_id=1495757888]
 mesh = SubResource("ArrayMesh_dnc73")
 skin = SubResource("Skin_k1sas")
 

@@ -1,8 +1,9 @@
 extends Control
 
-
-signal tower_selected
-signal block_selected
+signal strillone_selected
+signal volantinatore_selected
+signal stricioni_selected
+signal gazebo_selected
 
 @onready var days_of_strike: Label = $TopPanel/HBoxContainer/daysOfStrike
 @onready var worrkers_involved: Label = $TopPanel/HBoxContainer/worrkersInvolved
@@ -22,17 +23,24 @@ func updateHUD():
 	worrkers_involved.text = str(GameController.CurrentWorkers)
 
 
+
+
+#------ Buttons -----------
+func _on_volantinatore_pressed() -> void:
+	volantinatore_selected.emit()
+
+func _on_striscioni_pressed() -> void:
+	stricioni_selected.emit()
+
+func _on_strillone_pressed() -> void:
+	strillone_selected.emit()
+
 func _on_index_button_pressed() -> void:
 	market_widget.visible= true
 
-
 func _on_market_widget_closed() -> void:
-	market_widget.visible= false
+	market_widget.visible= false	
 
 
-func _on_tower_pressed() -> void:
-	tower_selected.emit() 
-
-
-func _on_block_pressed() -> void:
-	block_selected.emit()
+func _on_gazebo_pressed() -> void:
+	gazebo_selected.emit()

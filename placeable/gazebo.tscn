@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://6sf1jblax4m6"]
+
+[ext_resource type="PackedScene" uid="uid://m1vk33teyf8u" path="res://Assets/Mesh/Torrette/Banchetto.fbx" id="1_3lvqw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_im0tn"]
+albedo_color = Color(2.815649e-06, 0.46330518, 0.25399244, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_qncar"]
+material = SubResource("StandardMaterial3D_im0tn")
+size = Vector3(2.0217285, 2.4803467, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xfwl5"]
+size = Vector3(1.9885254, 2.3413696, 1.9462891)
+
+[node name="gazebo" type="Node3D" unique_id=437267418 groups=["blocks"]]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1045992139]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74017334, 0)
+visible = false
+mesh = SubResource("BoxMesh_qncar")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=805268489]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.021331787, 0.72592163, 0)
+shape = SubResource("BoxShape3D_xfwl5")
+
+[node name="Banchetto" parent="." unique_id=758356016 instance=ExtResource("1_3lvqw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.015203953, -0.45612198, -0.37950206)

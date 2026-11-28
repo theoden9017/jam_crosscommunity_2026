@@ -148,6 +148,7 @@ transform = Transform3D(64.697, 0, 0, 0, 1, 0, 0, 0, 35.0741, -8.844, 0, 1.71)
 script = ExtResource("2_l6r6a")
 shape = SubResource("BoxShape3D_qwfpk")
 cell_size = 1.2
+show_flow_field = false
 flow_arrow_height = 0.5
 blocks_clearance = 0.8
 placed_blocks_clearance = 0.3
@@ -403,6 +404,7 @@ mesh = SubResource("QuadMesh_oaf1g")
 skeleton = NodePath("../..")
 
 [connection signal="block_added" from="BlockPlacing" to="." method="_on_block_placing_block_added"]
-[connection signal="field_reviewed" from="FlowFieldBounds" to="." method="_on_flow_field_bounds_field_reviewed"]
-[connection signal="block_selected" from="HUD" to="." method="_on_hud_block_selected"]
-[connection signal="tower_selected" from="HUD" to="." method="_on_hud_tower_selected"]
+[connection signal="gazebo_selected" from="HUD" to="." method="_on_hud_gazebo_selected"]
+[connection signal="stricioni_selected" from="HUD" to="." method="_on_hud_stricioni_selected"]
+[connection signal="strillone_selected" from="HUD" to="." method="_on_hud_strillone_selected"]
+[connection signal="volantinatore_selected" from="HUD" to="." method="_on_hud_volantinatore_selected"]
