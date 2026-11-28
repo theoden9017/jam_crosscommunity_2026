@@ -1,5 +1,11 @@
 extends CharacterBody3D
 
+# Emesso quando il lavoratore viene convinto (HP a zero), non quando arriva al target.
+signal defeated(enemy: Node, stats: EnemyStats)
+
+## Tipo di lavoratore. Se assegnato, sovrascrive vita, movimento e quota sindacale.
+@export var stats: EnemyStats
+
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 
 
@@ -13,6 +19,8 @@ extends CharacterBody3D
 @export var minimum_progress_distance: float = 0.25
 @export var recovery_duration: float = 1.2
 @export var max_health: float = 100.0
+## Usata solo se `stats` è vuoto.
+@export var union_dues: int = 10
 
 var current_health: float
 var _debug_health_bar_enabled := false
@@ -38,6 +46,8 @@ var _recovery_direction := Vector3.ZERO
 
 # Assegna a ogni nemico una lieve variazione individuale di traiettoria e velocità.
 func _ready() -> void:
+	add_to_group("enemies")
+	_apply_stats()
 	current_health = max_health
 	_wander_phase = randf_range(0.0, TAU)
 	_lane_bias = randf_range(-crowd_variation, crowd_variation)
@@ -69,7 +79,35 @@ func take_damage(amount: float) -> void:
 	current_health = maxf(0.0, current_health - amount)
 	_update_health_bar()
 	if current_health <= 0.0:
-		queue_free()
+		_die()
+
+
+# Il lavoratore è convinto: versa la quota sindacale ed esce di scena.
+func _die() -> void:
+	GameController.add_union_funds(union_dues)
+	defeated.emit(self, stats)
+	queue_free()
+
+
+# Copia le statistiche del tipo sulle variabili usate dal movimento.
+func _apply_stats() -> void:
+	if stats == null:
+		return
+	max_health = stats.max_health
+	move_speed = stats.move_speed
+	acceleration = stats.acceleration
+	turn_speed_degrees = stats.turn_speed_degrees
+	union_dues = stats.union_dues
+	var skeleton := get_node_or_null("Skeleton3D") as Node3D
+	if skeleton:
+		skeleton.scale *= stats.model_scale
+	var mesh := get_node_or_null("Skeleton3D/Mesh") as MeshInstance3D
+	if mesh and stats.tint != Color.WHITE:
+		var base := mesh.get_active_material(0) as StandardMaterial3D
+		if base:
+			var tinted := base.duplicate() as StandardMaterial3D
+			tinted.albedo_color = base.albedo_color * stats.tint
+			mesh.material_override = tinted
 
 
 func _create_health_bar() -> void:

@@ -1,0 +1,75 @@
+[gd_scene format=3 uid="uid://c0btbdtgfrppw"]
+
+[ext_resource type="Script" uid="uid://bh4wtrndiaqel" path="res://Menu/splash.gd" id="1_splash"]
+[ext_resource type="Texture2D" uid="uid://cshs4c3jxyy7y" path="res://Assets/Picture/CGL.png" id="2_fu3ui"]
+[ext_resource type="Texture2D" uid="uid://cprnjlo2q58na" path="res://Assets/Picture/original-outline-vertical-light.svg" id="3_ibb0m"]
+
+[node name="Splash" type="Control" unique_id=207864733]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_splash")
+
+[node name="Background" type="ColorRect" parent="." unique_id=2110838319]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Slides" type="Control" parent="." unique_id=1111927219]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="GroupLogo" type="CenterContainer" parent="Slides" unique_id=1575629858]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="VBox" type="VBoxContainer" parent="Slides/GroupLogo" unique_id=493104749]
+custom_maximum_size = Vector2(500, -1)
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="Logo" type="TextureRect" parent="Slides/GroupLogo/VBox" unique_id=1776811841]
+custom_minimum_size = Vector2(700, 0)
+layout_mode = 2
+texture = ExtResource("2_fu3ui")
+expand_mode = 5
+stretch_mode = 5
+
+[node name="GodotLogo" type="CenterContainer" parent="Slides" unique_id=1797914407]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="VBox" type="VBoxContainer" parent="Slides/GodotLogo" unique_id=2024400484]
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="Logo" type="TextureRect" parent="Slides/GodotLogo/VBox" unique_id=1539899973]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+texture = ExtResource("3_ibb0m")
+expand_mode = 5
+stretch_mode = 5

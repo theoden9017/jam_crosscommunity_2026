@@ -1,0 +1,71 @@
+[gd_resource type="Resource" script_class="WaveTable" format=3 uid="uid://cu1a3ygcc8rio"]
+
+[ext_resource type="Script" uid="uid://b13eh07ws5wen" path="res://Enemies/wave_table.gd" id="1_bga31"]
+[ext_resource type="Script" uid="uid://cw5qfxoid2rvg" path="res://Enemies/wave_data.gd" id="2_cb544"]
+[ext_resource type="Script" uid="uid://c4pi04vyrm6y5" path="res://Enemies/enemy_stats.gd" id="3_8uuuk"]
+[ext_resource type="Resource" path="res://Enemies/operaio.tres" id="4_110vv"]
+[ext_resource type="Resource" path="res://Enemies/impiegato.tres" id="5_qlcv3"]
+[ext_resource type="Resource" path="res://Enemies/venditore.tres" id="6_rtux4"]
+[ext_resource type="Resource" path="res://Enemies/dirigente.tres" id="7_u0f4h"]
+
+[sub_resource type="Resource" id="Resource_l0142"]
+script = ExtResource("2_cb544")
+enemies = Dictionary[ExtResource("3_8uuuk"), int]({
+ExtResource("4_110vv"): 10,
+ExtResource("5_qlcv3"): 10
+})
+pause_before = 15.0
+
+[sub_resource type="Resource" id="Resource_aq6su"]
+script = ExtResource("2_cb544")
+enemies = Dictionary[ExtResource("3_8uuuk"), int]({
+ExtResource("4_110vv"): 8,
+ExtResource("5_qlcv3"): 10,
+ExtResource("6_rtux4"): 1
+})
+pause_before = 8.0
+
+[sub_resource type="Resource" id="Resource_nudjt"]
+script = ExtResource("2_cb544")
+enemies = Dictionary[ExtResource("3_8uuuk"), int]({
+ExtResource("4_110vv"): 15,
+ExtResource("5_qlcv3"): 20,
+ExtResource("6_rtux4"): 2
+})
+pause_before = 8.0
+
+[sub_resource type="Resource" id="Resource_1bafl"]
+script = ExtResource("2_cb544")
+pause_before = 8.0
+
+[sub_resource type="Resource" id="Resource_4hao7"]
+script = ExtResource("2_cb544")
+pause_before = 8.0
+
+[sub_resource type="Resource" id="Resource_lsh6s"]
+script = ExtResource("2_cb544")
+enemies = Dictionary[ExtResource("3_8uuuk"), int]({
+ExtResource("4_110vv"): 10,
+ExtResource("6_rtux4"): 5
+})
+pause_before = 8.0
+
+[sub_resource type="Resource" id="Resource_33da2"]
+script = ExtResource("2_cb544")
+enemies = Dictionary[ExtResource("3_8uuuk"), int]({
+ExtResource("4_110vv"): 20,
+ExtResource("6_rtux4"): 6,
+ExtResource("7_u0f4h"): 1
+})
+pause_before = 8.0
+
+[sub_resource type="Resource" id="Resource_p3nbr"]
+script = ExtResource("2_cb544")
+enemies = Dictionary[ExtResource("3_8uuuk"), int]({
+ExtResource("7_u0f4h"): 6
+})
+pause_before = 8.0
+
+[resource]
+script = ExtResource("1_bga31")
+waves = Array[ExtResource("2_cb544")]([SubResource("Resource_l0142"), SubResource("Resource_aq6su"), SubResource("Resource_nudjt"), SubResource("Resource_1bafl"), SubResource("Resource_4hao7"), SubResource("Resource_lsh6s"), SubResource("Resource_33da2"), SubResource("Resource_p3nbr")])

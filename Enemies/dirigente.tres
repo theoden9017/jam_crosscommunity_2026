@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="EnemyStats" format=3]
+
+[ext_resource type="Script" path="res://Enemies/enemy_stats.gd" id="1_stats"]
+
+[resource]
+script = ExtResource("1_stats")
+display_name = "Dirigente"
+max_health = 300.0
+move_speed = 1.6
+acceleration = 6.0
+union_dues = 60
+tint = Color(0.55, 0.55, 0.6, 1)
+model_scale = 1.2
+endless_weight = 0.5
